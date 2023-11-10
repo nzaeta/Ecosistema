@@ -97,9 +97,4 @@ public class UserController {
     private ResponseEntity<Boolean> disabledUserByEmail(@RequestParam String email) {
         return new ResponseEntity<Boolean>(userService.disabledUserByEmail(email) ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
-
-    @PatchMapping("disable-name-lastName")
-    private ResponseEntity<Boolean> disabledUserByNameAndLastName(@RequestParam String name, @RequestParam String lastName) {
-        return new ResponseEntity<Boolean>(userService.disabledUserByNameAndLastName(name, lastName) ? HttpStatus.OK : HttpStatus.NOT_FOUND);
-    }
 }

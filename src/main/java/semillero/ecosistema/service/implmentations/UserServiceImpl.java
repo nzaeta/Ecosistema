@@ -74,31 +74,4 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userEntity);
         return true;
     }
-
-    @Override
-    public Boolean disabledUserByNameAndLastName(String name, String lastName) {
-        List<UserEntity> userEntityList = userRepository.findByNombreAndApellido(name, lastName);
-        if(userEntityList == null) {
-            return false;
-        }
-        UserEntity userEntityDisabled = mapperListToEntity(userEntityList);
-        userRepository.save(userEntityDisabled);
-        return true;
-    }
-
-    private UserEntity mapperListToEntity(List<UserEntity> userEntityList) {
-        UserEntity userEntity = new UserEntity();
-        userEntityList.stream()
-                .forEach(userList -> {
-                    userEntity.setId(userList.getId());
-                    userEntity.setNombre(userList.getNombre());
-                    userEntity.setApellido(userList.getApellido());
-                    userEntity.setEmail(userList.getEmail());
-                    userEntity.setPassword(userList.getPassword());
-                    userEntity.setDeleted(true);
-                    userEntity.setRol(userList.getRol());
-                    userEntity.setTelefono(userList.getTelefono());
-                });
-        return userEntity;
-    }
 }

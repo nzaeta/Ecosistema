@@ -19,6 +19,4 @@ public interface UserService {
     Boolean disabledUserById(Long id);
 
     Boolean disabledUserByEmail(String email);
-
-    Boolean disabledUserByNameAndLastName(String name, String lastName);
 }
