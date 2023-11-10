@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import semillero.ecosistema.entity.UserEntity;
 import semillero.ecosistema.exception.EmailExistException;
 import semillero.ecosistema.exception.ErrorResponse;
+import semillero.ecosistema.exception.UserNotExistException;
 import semillero.ecosistema.service.contracts.UserService;
 
 import java.util.List;
@@ -77,8 +78,8 @@ public class UserController {
     private ResponseEntity<?> update(@RequestParam String email, @RequestBody UserEntity userEntity) {
         try {
             return new ResponseEntity(userService.update(email, userEntity), HttpStatus.OK);
-        } catch (EmailExistException emailExistException) {
-            String errorMessage = "El correo electronico ya existe";
+        } catch (UserNotExistException userNotExistException) {
+            String errorMessage = "El usuario no existe";
             ErrorResponse errorResponse = new ErrorResponse(errorMessage);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
 
