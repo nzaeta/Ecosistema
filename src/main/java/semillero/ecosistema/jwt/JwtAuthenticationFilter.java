@@ -21,15 +21,15 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-   private final JwtService jwtService;
-   private final UserDetailsService userDetailsService;
+    private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
         final String token = getTokenFromRequest(request);
-        final String username = null;
+        final String username;
 
         if (token==null)
         {
@@ -37,7 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-       // username=jwtService.getUsernameFromToken(token);
+        username=jwtService.getUsernameFromToken(token);
 
         if (username!=null && SecurityContextHolder.getContext().getAuthentication()==null)
         {
@@ -69,6 +69,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         return null;
     }
+
 
 
 
