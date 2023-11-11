@@ -5,16 +5,16 @@ import org.springframework.stereotype.Repository;
 import semillero.ecosistema.entity.UserEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity,Long> {
     List<UserEntity> findByNombreAndApellido(String nombre, String apellido);
-    Optional<UserEntity> findByEmail(String email);
+    UserEntity findByEmail(String email);
     List<UserEntity> findByRol(String rol);
 
     void deleteByEmail(String email);
 
     List<UserEntity> findAllByOrderByNombreAsc();
+
 
 }
