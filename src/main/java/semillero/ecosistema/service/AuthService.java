@@ -77,6 +77,9 @@ public class AuthService {
 
        if (userRepository.findByEmail(email) != null) {
            usuario = userRepository.findByEmail(payload.getEmail());
+           usuario.setApellido(familyName);
+           usuario.setNombre(givenName);
+           usuario = userRepository.save(usuario);
        }else{
            usuario.setApellido(familyName);
            usuario.setDeleted(false);
@@ -88,7 +91,6 @@ public class AuthService {
        }
 
         //GENERA TOKEN
-        UserDetails user = userRepository.findByEmail(email);
         String token = jwtService.getToken(usuario);
         return AuthResponse.builder()
                 .token(token)
@@ -97,35 +99,3 @@ public class AuthService {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    public AuthResponse register(RegisterRequest request) {
-//        User user = User.builder()
-//                .username(request.getUsername())
-//                .password(passwordEncoder.encode( request.getPassword()))
-//                .firstname(request.getFirstname())
-//                .lastname(request.lastname)
-//                .country(request.getCountry())
-//                .role(Role.USER)
-//                .build();
-//
-//        userRepository.save(user);
-//
-//        return AuthResponse.builder()
-//                .token(jwtService.getToken(user))
-//                .build();
-//
-//    }
-
-

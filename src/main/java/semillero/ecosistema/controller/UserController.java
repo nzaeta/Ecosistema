@@ -21,9 +21,9 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    @Secured("USER")
+    @Secured("ADMIN")
     @GetMapping("/all")
-    private ResponseEntity<List<UserEntity>> getAll() {
+    public ResponseEntity<List<UserEntity>> getAll() {
         List<UserEntity> userEntityList = userService.getAll();
         try {
             if(userEntityList.isEmpty()) {
@@ -35,8 +35,9 @@ public class UserController {
         }
     }
 
+    @Secured("ADMIN")
     @GetMapping("/all-rol")
-    private ResponseEntity<List<UserEntity>> getAllByRol(@RequestParam String rol) {
+    public ResponseEntity<List<UserEntity>> getAllByRol(@RequestParam String rol) {
         List<UserEntity> userEntityList = userService.getAllByRol(rol);
         try {
             if(userEntityList.isEmpty()) {
@@ -48,8 +49,9 @@ public class UserController {
         }
     }
 
+    @Secured("ADMIN")
     @GetMapping("/get-email")
-    private ResponseEntity<UserEntity> getByEmail(@RequestParam String email) {
+    public ResponseEntity<UserEntity> getByEmail(@RequestParam String email) {
         UserEntity userEntity = userService.getByEmail(email);
         try {
             if(userEntity == null) {
@@ -61,8 +63,9 @@ public class UserController {
         }
     }
 
+    @Secured("ADMIN")
     @PostMapping("/save")
-    private ResponseEntity<?> save(@RequestBody UserEntity userEntity) {
+    public ResponseEntity<?> save(@RequestBody UserEntity userEntity) {
 
         try {
             return new ResponseEntity(userService.save(userEntity), HttpStatus.CREATED);
@@ -76,8 +79,9 @@ public class UserController {
         }
     }
 
+    @Secured("ADMIN")
     @PutMapping("/update")
-    private ResponseEntity<?> update(@RequestParam String email, @RequestBody UserEntity userEntity) {
+    public ResponseEntity<?> update(@RequestParam String email, @RequestBody UserEntity userEntity) {
         try {
             return new ResponseEntity(userService.update(email, userEntity), HttpStatus.OK);
         } catch (UserNotExistException userNotExistException) {
@@ -90,13 +94,15 @@ public class UserController {
         }
     }
 
+    @Secured("ADMIN")
     @PatchMapping("disable-id")
-    private ResponseEntity<Boolean> disabledUserById(@RequestParam Long userId) {
+    public ResponseEntity<Boolean> disabledUserById(@RequestParam Long userId) {
         return new ResponseEntity<Boolean>(userService.disabledUserById(userId) ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 
+    @Secured("ADMIN")
     @PatchMapping("disable-email")
-    private ResponseEntity<Boolean> disabledUserByEmail(@RequestParam String email) {
+    public ResponseEntity<Boolean> disabledUserByEmail(@RequestParam String email) {
         return new ResponseEntity<Boolean>(userService.disabledUserByEmail(email) ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 }
