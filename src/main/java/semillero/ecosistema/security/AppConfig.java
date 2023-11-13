@@ -15,13 +15,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import semillero.ecosistema.repository.UserRepository;
+import semillero.ecosistema.entity.UserEntity;
+import semillero.ecosistema.exception.UserNotExistException;
+import semillero.ecosistema.service.contracts.UserService;
+
 
 @Configuration
 @RequiredArgsConstructor
 public class AppConfig {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception
@@ -45,8 +48,9 @@ public class AppConfig {
 
     @Bean
     public UserDetailsService userDetailService() {
-        return username -> userRepository.findByEmail(username)
-                .orElseThrow(()-> new UsernameNotFoundException("User not found"));
+
+        return username -> userService.getByEmail(username);
+//                .orElseThrow(()-> new UsernameNotFoundException("User not found"));
     }
 
 

@@ -17,19 +17,26 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class GoogleAuthController {
 
-//    private final AuthService authService;
+    private final AuthService authService;
 
-//    @PostMapping("")
-//    public ResponseEntity<AuthResponse> login(@RequestBody Map<String, String> datos) throws Exception{
-//       String googleToken = datos.get("credential");
-//
-//
-//        try {
-//            return ResponseEntity.ok(authService.login(googleToken));
-//        } catch (RuntimeException e) {
-//            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
-//        }
-//    }
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody Map<String, String>datos) {
+        return ResponseEntity.ok(authService.login(datos));
+    }
+
+
+    @PostMapping("googlelogin")
+    public ResponseEntity<AuthResponse> googlelogin(@RequestBody Map<String, String> datos) throws Exception{
+       String googleToken = datos.get("credential");
+
+        try {
+            return ResponseEntity.ok(authService.googlelogin(googleToken));
+        } catch (RuntimeException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 
 
 }
