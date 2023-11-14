@@ -2,13 +2,12 @@ package semillero.ecosistema.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "categorias")
-@Getter @Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryEntity {

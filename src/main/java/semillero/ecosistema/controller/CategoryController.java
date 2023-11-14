@@ -52,7 +52,7 @@ public class CategoryController {
         try {
             return new ResponseEntity(categoryService.save(categoryEntity), HttpStatus.CREATED);
         } catch (CategoryExistException categoryExistException) {
-            String errorMessage = "ELa categoria ingresada ya existe";
+            String errorMessage = "La categoría ingresada ya existe";
             ErrorResponse errorResponse = new ErrorResponse(errorMessage);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
 
@@ -66,7 +66,7 @@ public class CategoryController {
         try {
             return new ResponseEntity(categoryService.update(nameCategory, categoryEntity), HttpStatus.OK);
         } catch (CategoryNotExistException categoryNotExistException) {
-            String errorMessage = "La categoria ingresada no existe";
+            String errorMessage = "La categoría ingresada no existe";
             ErrorResponse errorResponse = new ErrorResponse(errorMessage);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         } catch (ResponseStatusException e) {
