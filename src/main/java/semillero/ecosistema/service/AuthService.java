@@ -42,7 +42,7 @@ public class AuthService {
 
     public AuthResponse login(Map<String, String> datos) {
         String email = datos.get("email");
-        UserDetails user = userRepository.findByEmail(email);
+        UserEntity user = userRepository.findByEmail(email);
 //        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, null, user.getAuthorities());
 //        SecurityContextHolder.getContext().setAuthentication(authToken);
 //        UserDetails user = userRepository.findByUsername(request.getUsername()).orElseThrow();
