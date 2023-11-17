@@ -48,7 +48,7 @@ public class CountryController {
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody CountryEntity countryEntity){
         try {
-            return new ResponseEntity(countryService.save(countryEntity),HttpStatus.CREATED);
+            return new ResponseEntity<>(countryService.save(countryEntity),HttpStatus.CREATED);
         }catch (CountryExistException countryExistException){
             String errorMessage = "El pais ingresado ya existe";
             ErrorResponse errorResponse = new ErrorResponse(errorMessage);
@@ -61,7 +61,7 @@ public class CountryController {
     @PatchMapping("/update")
     public ResponseEntity<?> update(@RequestParam String nameCountry, @RequestBody CountryEntity countryEntity){
         try {
-            return new ResponseEntity(countryService.update(nameCountry,countryEntity),HttpStatus.OK);
+            return new ResponseEntity<>(countryService.update(nameCountry,countryEntity),HttpStatus.OK);
         }catch (CountryNotExistException countryNotExistException){
             String errorMessage = "El pais no existe";
             ErrorResponse errorResponse = new ErrorResponse(errorMessage);

@@ -2,7 +2,6 @@ package semillero.ecosistema.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import semillero.ecosistema.entity.CountryEntity;
 import semillero.ecosistema.entity.ProvinceEntity;
 
 import java.util.List;
@@ -11,5 +10,5 @@ import java.util.List;
 public interface ProvinceRepository extends JpaRepository<ProvinceEntity, Long> {
     ProvinceEntity findByNombre (String nombre);
 
-    List<ProvinceEntity> findByPais(CountryEntity pais);
+    List<ProvinceEntity> findByPais(String nombrePais);
 }
