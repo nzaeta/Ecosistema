@@ -41,6 +41,7 @@ public class JwtService {
                 .claim("apellido", user.getApellido())
                 .claim("email", user.getEmail())
                 .claim("rol", user.getRol())
+                .claim("imagen", user.getImagen())
                 .compact();
     }
 

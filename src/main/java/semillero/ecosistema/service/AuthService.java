@@ -43,9 +43,6 @@ public class AuthService {
     public AuthResponse login(Map<String, String> datos) {
         String email = datos.get("email");
         UserEntity user = userRepository.findByEmail(email);
-//        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, null, user.getAuthorities());
-//        SecurityContextHolder.getContext().setAuthentication(authToken);
-//        UserDetails user = userRepository.findByUsername(request.getUsername()).orElseThrow();
 
         String token = jwtService.getToken(user);
         return AuthResponse.builder()
@@ -69,7 +66,7 @@ public class AuthService {
         String email = payload.getEmail();
         String familyName = (String) payload.get("family_name");
         String givenName = (String) payload.get("given_name");
-        //        String pictureUrl = (String) payload.get("picture");
+        String pictureUrl = (String) payload.get("picture");
 
         // BUSCAR EL USUARIO EN LA BD Y TRAER LOS DATOS. SI NO EXISTE HAY QUE GUARDARLO
 
@@ -79,6 +76,7 @@ public class AuthService {
            usuario = userRepository.findByEmail(payload.getEmail());
            usuario.setApellido(familyName);
            usuario.setNombre(givenName);
+           usuario.setImagen(pictureUrl);
            usuario = userRepository.save(usuario);
        }else{
            usuario.setApellido(familyName);
@@ -86,6 +84,7 @@ public class AuthService {
            usuario.setEmail(email);
            usuario.setNombre(givenName);
            usuario.setRol("USER");
+           usuario.setImagen(pictureUrl);
 
            usuario = userRepository.save(usuario);
        }

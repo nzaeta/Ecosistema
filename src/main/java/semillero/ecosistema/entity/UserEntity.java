@@ -33,6 +33,7 @@ public class UserEntity implements UserDetails {
     private boolean deleted;
     private String rol;
     private String telefono;
+    private String imagen;
 
 
     @Override
