@@ -26,8 +26,8 @@ public class ProvinceServiceImpl implements ProvinceService {
     }
 
     @Override
-    public List<ProvinceEntity> getByPais(String nombrePais){
-        return provinceRepository.findByPais(nombrePais);
+    public List<ProvinceEntity> getByPais(int pais_id){
+        return provinceRepository.findByPais(pais_id);
     }
 
     @Override
