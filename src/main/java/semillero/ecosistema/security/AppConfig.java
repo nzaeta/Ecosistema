@@ -60,7 +60,7 @@ public class AppConfig {
             @Override
             public void addCorsMappings(@NotNull CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000") // Update with your frontend URL
+                        .allowedOrigins("http://localhost:5173") // Update with your frontend URL
                         .allowedMethods("GET", "POST", "PUT", "DELETE","OPTIONS")
                         .allowCredentials(true);
             }
