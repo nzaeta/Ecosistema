@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "usuarios")
 @Data
@@ -23,5 +25,7 @@ public class UserEntity {
     private boolean deleted;
     private String rol;
     private String telefono;
-}
 
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    private List<ProviderEntity> providerEntityList;
+}
