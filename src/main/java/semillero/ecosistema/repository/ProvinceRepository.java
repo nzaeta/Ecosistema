@@ -10,5 +10,5 @@ import java.util.List;
 public interface ProvinceRepository extends JpaRepository<ProvinceEntity, Long> {
     ProvinceEntity findByNombre (String nombre);
 
-    List<ProvinceEntity> findByPais(int pais_id);
+    List<ProvinceEntity> findByPaisId(Long pais_id);
 }

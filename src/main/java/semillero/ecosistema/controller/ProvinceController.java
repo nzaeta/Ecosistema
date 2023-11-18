@@ -46,7 +46,7 @@ public class ProvinceController {
     }
 
     @GetMapping("/by-pais")
-    private ResponseEntity<List<ProvinceEntity>> getByPais(@RequestParam int pais_id){
+    private ResponseEntity<List<ProvinceEntity>> getByPais(@RequestParam Long pais_id){
         List<ProvinceEntity> provinceEntityList = provinceService.getByPais(pais_id);
         try {
             if (provinceEntityList.isEmpty()){
