@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "categorias")
 @Getter @Setter
@@ -18,4 +20,6 @@ public class CategoryEntity {
     private Long id;
     private String nombre;
 
+    @OneToMany(mappedBy = "category", cascade = {CascadeType.ALL})
+    List<ProviderEntity> providerEntityList;
 }

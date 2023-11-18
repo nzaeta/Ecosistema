@@ -1,21 +1,11 @@
-package semillero.ecosistema.entity;
+package semillero.ecosistema.Dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
-@Table(name = "proveedores")
 @Getter @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class ProviderEntity {
+public class ProviderRequestDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long categoryId;
     private Long countryId; // pais ID
@@ -35,20 +25,4 @@ public class ProviderEntity {
     private String status;
     private Boolean openFullImage;
     private String feedBack;
-
-    /**
-     * private Pais pais
-     * private Provincia provincia
-     */
-
-    @ManyToOne()
-    @JoinColumn(name = "userId")
-    @JsonIgnore
-    private UserEntity users;
-
-    @ManyToOne()
-    @JoinColumn(name = "categoryId", insertable = false, updatable = false)
-    @JsonIgnore
-    private CategoryEntity category;
-
 }
