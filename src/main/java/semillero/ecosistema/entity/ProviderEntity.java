@@ -17,11 +17,6 @@ public class ProviderEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long categoryId;
-    private Long countryId; // pais ID
-    private Long provinceId; // provincia/estado ID
-
-
     private String name;
     private String description;
     private String numberPhone;
@@ -32,12 +27,9 @@ public class ProviderEntity {
 
     private String image; // falta para que guarde 3 imagenes
 
-
     private Boolean active;
     private Boolean deleted;
     private String feedBack;
-
-
 
     private Boolean isNew;           // ESTO PARA QUÉ ES??
     private String status;           // ESTO PARA QUÉ ES??
@@ -46,10 +38,16 @@ public class ProviderEntity {
     @Column(length = 300)
     private String about; // descripcion larga del producto
 
-    /**
-     * private Pais pais
-     * private Provincia provincia
-     */
+
+    @ManyToOne()
+    @JoinColumn(name = "countryId") //, insertable = false, updatable = false)
+    @JsonIgnore
+    private CountryEntity country;
+
+    @ManyToOne()
+    @JoinColumn(name = "provinceId") //, insertable = false, updatable = false)
+    @JsonIgnore
+    private ProvinceEntity province;
 
     @ManyToOne()
     @JoinColumn(name = "userId")
@@ -57,7 +55,7 @@ public class ProviderEntity {
     private UserEntity user;
 
     @ManyToOne()
-    @JoinColumn(name = "categoryId", insertable = false, updatable = false)
+    @JoinColumn(name = "categoryId") //, insertable = false, updatable = false)
     @JsonIgnore
     private CategoryEntity category;
 

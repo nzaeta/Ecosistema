@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import semillero.ecosistema.Dto.ProviderRequestDto;
 import semillero.ecosistema.Dto.ProviderResponseDto;
 import semillero.ecosistema.entity.ProviderEntity;
 import semillero.ecosistema.exception.ErrorResponse;
@@ -51,7 +52,7 @@ public class ProviderController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestParam Long id, @RequestBody ProviderEntity providerEntity) {
+    public ResponseEntity<?> save(@RequestParam Long id, @RequestBody ProviderRequestDto providerEntity) {
 
         try {
             if(id == null || providerEntity == null) {
@@ -71,22 +72,22 @@ public class ProviderController {
         }
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<?> update(@RequestParam Long id, @RequestBody ProviderEntity providerEntity) {
-
-        try {
-            if(id == null || providerEntity == null) {
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-            return ResponseEntity.status(HttpStatus.OK).body(providerService.update(id,providerEntity));
-        } catch (UserNotExistException userNotExistException) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageErrorResponse("El usuario ingresado no existe"));
-        } catch (ProviderNotExistException providerNotExistException) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageErrorResponse("El proveedor no existe"));
-        } catch (ResponseStatusException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-    }
+//    @PutMapping("/update")
+//    public ResponseEntity<?> update(@RequestParam Long id, @RequestBody ProviderEntity providerEntity) {
+//
+//        try {
+//            if(id == null || providerEntity == null) {
+//                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+//            }
+//            return ResponseEntity.status(HttpStatus.OK).body(providerService.update(id,providerEntity));
+//        } catch (UserNotExistException userNotExistException) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageErrorResponse("El usuario ingresado no existe"));
+//        } catch (ProviderNotExistException providerNotExistException) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageErrorResponse("El proveedor no existe"));
+//        } catch (ResponseStatusException e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//    }
 
     private ErrorResponse messageErrorResponse(String message) {
         return new ErrorResponse(message);

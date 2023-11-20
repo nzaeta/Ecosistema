@@ -19,6 +19,6 @@ public class CategoryEntity {
     private Long id;
     private String nombre;
 
-    @OneToMany(mappedBy = "category", cascade = {CascadeType.ALL})
-    List<ProviderEntity> providerEntityList;
+//    @OneToMany(mappedBy = "category", cascade = {CascadeType.ALL})
+//    List<ProviderEntity> providerEntityList;
 }

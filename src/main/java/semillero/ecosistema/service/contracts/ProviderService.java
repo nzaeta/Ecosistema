@@ -1,5 +1,6 @@
 package semillero.ecosistema.service.contracts;
 
+import semillero.ecosistema.Dto.ProviderRequestDto;
 import semillero.ecosistema.Dto.ProviderResponseDto;
 import semillero.ecosistema.entity.ProviderEntity;
 
@@ -11,7 +12,7 @@ public interface ProviderService {
 
     List<ProviderResponseDto> getByName(String name);
 
-    ProviderEntity save(Long userId, ProviderEntity providerEntity);
+    ProviderEntity save(Long userId, ProviderRequestDto providerRequestDto);
 
-    ProviderEntity update(Long userId,ProviderEntity providerEntity);
+//    ProviderEntity update(Long userId,ProviderRequestDto providerRequestDto);
 }
