@@ -31,10 +31,13 @@ public class ProviderServiceImpl implements ProviderService {
 
     @Override
     public List<ProviderResponseDto> getAll() {
+        System.out.println("ESTOY");
         List<ProviderEntity> providerEntityList = providerRepository.findAll();
+        System.out.println("ESTOY ACA");
         List<ProviderResponseDto> providerResponseDtoList = providerMapper.toDtoList(providerEntityList);
-
+        System.out.println("ESTOY ACA 2");
         mapperParamsProvider(providerEntityList, providerResponseDtoList);
+        System.out.println("ESTOY ACA 3");
         return providerResponseDtoList;
     }
 
@@ -71,7 +74,7 @@ public class ProviderServiceImpl implements ProviderService {
     public ProviderEntity save(Long userId, ProviderEntity providerEntity) {
         UserEntity userEntity = getUsersById(userId);
 
-        validateMaxProvides(userEntity);
+        validateMaxProviders(userEntity);
 
         parametersInitialProvider(providerEntity, userEntity);
 
@@ -92,7 +95,7 @@ public class ProviderServiceImpl implements ProviderService {
     /**
      * Validar el maximo de proveedores al crear por usuario
      */
-    private void validateMaxProvides(UserEntity userEntity) {
+    private void validateMaxProviders(UserEntity userEntity) {
         if(userEntity.getProviderEntityList().size() >= 3) {
             throw new ProviderMaxCreatedException();
         }
@@ -107,18 +110,21 @@ public class ProviderServiceImpl implements ProviderService {
         providerEntity.setActive(true);
         providerEntity.setDeleted(false);
         providerEntity.setOpenFullImage(false);
-        providerEntity.setUsers(userEntity);
+        providerEntity.setUser(userEntity);
     }
 
     @Override
     public ProviderEntity update(Long userId, ProviderEntity providerEntity) {
         UserEntity userEntity = getUsersById(userId);
+        System.out.println("ESTOY");
         Optional<ProviderEntity> existProvider = providerRepository.findById(providerEntity.getId());
+        System.out.println("ESTOY 2 " );
         if(existProvider.isEmpty()) {
             throw new ProviderNotExistException();
         }
-
-        providerEntity.setUsers(userEntity);
+        System.out.println("ESTOY 3");
+        providerEntity.setUser(userEntity);
+        System.out.println("ESTOY 4 ");
         return providerRepository.save(providerEntity);
     }
 }

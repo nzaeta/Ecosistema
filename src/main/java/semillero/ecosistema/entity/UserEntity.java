@@ -26,6 +26,6 @@ public class UserEntity {
     private String rol;
     private String telefono;
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ProviderEntity> providerEntityList;
 }
