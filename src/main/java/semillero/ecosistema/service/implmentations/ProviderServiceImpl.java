@@ -40,7 +40,7 @@ public class ProviderServiceImpl implements ProviderService {
 
     @Override
     public List<ProviderResponseDto> getByName(String name) {
-        List<ProviderEntity> providerEntityList = providerRepository.findByName(name);
+        List<ProviderEntity> providerEntityList = providerRepository.searchProviderByName(name);
         List<ProviderResponseDto> providerResponseDtoList = providerMapper.toDtoList(providerEntityList);
 
         mapperParamsProvider(providerEntityList, providerResponseDtoList);

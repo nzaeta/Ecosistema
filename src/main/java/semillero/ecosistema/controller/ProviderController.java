@@ -8,10 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import semillero.ecosistema.Dto.ProviderRequestDto;
 import semillero.ecosistema.Dto.ProviderResponseDto;
 import semillero.ecosistema.entity.ProviderEntity;
-import semillero.ecosistema.exception.ErrorResponse;
-import semillero.ecosistema.exception.ProviderMaxCreatedException;
-import semillero.ecosistema.exception.ProviderNotExistException;
-import semillero.ecosistema.exception.UserNotExistException;
+import semillero.ecosistema.exception.*;
 import semillero.ecosistema.service.contracts.ProviderService;
 
 import java.util.List;
@@ -38,14 +35,21 @@ public class ProviderController {
     }
 
     @GetMapping("/get-name")
-    public ResponseEntity<List<ProviderResponseDto>> getByName(@RequestParam String name) {
+    public ResponseEntity<?> getByName(@RequestParam String name) {
         List<ProviderResponseDto> providerResponseDtoList = providerService.getByName(name);
         try {
-            if(name == null || providerResponseDtoList.size() == 0) {
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            if(name == null || name.length() < 3) {
+                throw new ProviderSearchException();
+            }
+
+            if(providerResponseDtoList.size() == 0) {
+                return ResponseEntity.status(HttpStatus.OK).body(messageErrorResponse("No hay proveedores con ese nombre"));
             }
 
             return ResponseEntity.ok(providerResponseDtoList);
+        } catch (ProviderSearchException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageErrorResponse(e.getMessage()));
+
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
