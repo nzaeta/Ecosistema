@@ -12,6 +12,10 @@ public interface ProviderService {
 
     List<ProviderResponseDto> getByName(String name);
 
+    List<ProviderResponseDto> getByCategory(String category);
+
+    List<ProviderResponseDto> getAccepted();
+
     ProviderEntity save(Long userId, ProviderRequestDto providerRequestDto);
 
 //    ProviderEntity update(Long userId,ProviderRequestDto providerRequestDto);

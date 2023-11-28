@@ -34,6 +34,19 @@ public class ProviderController {
         }
     }
 
+    @GetMapping("/accepted")
+    public ResponseEntity<List<ProviderResponseDto>> getAccepted() {
+        List<ProviderResponseDto> providerResponseDtoList = providerService.getAccepted();
+        try {
+            if(providerResponseDtoList.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
+            return ResponseEntity.ok(providerResponseDtoList);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
     @GetMapping("/get-name")
     public ResponseEntity<?> getByName(@RequestParam String name) {
         List<ProviderResponseDto> providerResponseDtoList = providerService.getByName(name);
@@ -44,6 +57,23 @@ public class ProviderController {
 
             if(providerResponseDtoList.size() == 0) {
                 return ResponseEntity.status(HttpStatus.OK).body(messageErrorResponse("No hay proveedores con ese nombre"));
+            }
+
+            return ResponseEntity.ok(providerResponseDtoList);
+        } catch (ProviderSearchException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageErrorResponse(e.getMessage()));
+
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @GetMapping("/get-category")
+    public ResponseEntity<?> getByCategory(@RequestParam String categoria) {
+        List<ProviderResponseDto> providerResponseDtoList = providerService.getByCategory(categoria);
+        try {
+            if(providerResponseDtoList.size() == 0) {
+                return ResponseEntity.status(HttpStatus.OK).body(messageErrorResponse("No hay proveedores con esa categoría"));
             }
 
             return ResponseEntity.ok(providerResponseDtoList);
