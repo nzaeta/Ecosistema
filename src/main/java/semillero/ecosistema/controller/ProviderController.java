@@ -1,8 +1,10 @@
 package semillero.ecosistema.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import semillero.ecosistema.Dto.ProviderRequestDto;
@@ -50,9 +52,9 @@ public class ProviderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
-
+    //@Secured("USER")
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestParam Long id, @RequestBody ProviderRequestDto providerEntity) {
+    public ResponseEntity<?> save(@RequestParam Long id, @RequestBody @Valid ProviderRequestDto providerEntity) {
 
         try {
             if(id == null || providerEntity == null) {
@@ -65,7 +67,7 @@ public class ProviderController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageErrorResponse("El usuario ingresado no existe"));
 
         } catch (ProviderMaxCreatedException providerMaxCreatedException) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageErrorResponse("Has superado el limite de 3 proveedores creados por usuario"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageErrorResponse("Has superado el límite de 3 proveedores creados por usuario"));
 
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
