@@ -1,0 +1,58 @@
+package semillero.ecosistema.controller;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import semillero.ecosistema.dto.PublicationRequestDto;
+import semillero.ecosistema.dto.PublicationResponseDto;
+import semillero.ecosistema.entity.PublicationEntity;
+import semillero.ecosistema.service.contracts.PublicationService;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(path="/Publications")
+public class PublicationController {
+    private final PublicationService publicationService;
+
+
+    public PublicationController(PublicationService publicationService) {
+        this.publicationService = publicationService;
+    }
+
+    @GetMapping
+    public List<PublicationResponseDto> getAllPublications() { return publicationService.getAll();
+    }
+
+    @GetMapping("/get-titulo")
+    public PublicationResponseDto getByTitulo(@RequestParam String titulo){
+        return publicationService.getByTitulo(titulo);
+    }
+
+    @GetMapping("/get-id")
+    public PublicationResponseDto getById(@RequestParam Long id){
+        return publicationService.getById(id);
+    }
+
+    @GetMapping("/get-not-deleted")
+    public List<PublicationResponseDto> getNotDeleted(){
+        return publicationService.getByDeletedFalse();
+    }
+
+    @GetMapping("/get-user-id")
+    public List<PublicationResponseDto> getByUserId (Long user_id){
+        return publicationService.getByUsuarioId(user_id);
+    }
+
+    @PatchMapping("/increment-view")
+    public void incrementView(@RequestParam Long id){
+        publicationService.incrementViewCount(id);
+    }
+
+    @PostMapping("/save")
+    public PublicationResponseDto save(@RequestBody PublicationRequestDto publicationRequestDto){
+        return publicationService.save(publicationRequestDto);
+    }
+
+}

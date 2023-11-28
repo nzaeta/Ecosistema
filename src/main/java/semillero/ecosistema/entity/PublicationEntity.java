@@ -25,7 +25,7 @@ public class PublicationEntity {
     private Date fechaCreacion;
     private String imagenes;
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "user_id")
     private UserEntity usuarioCreador;
     private int cantVisualizaciones;
 }

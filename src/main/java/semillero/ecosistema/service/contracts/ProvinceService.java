@@ -11,4 +11,5 @@ public interface ProvinceService {
     ProvinceEntity save(ProvinceEntity provinceEntity);
     ProvinceEntity update(String nameProvince, ProvinceEntity provinceEntity);
 
+
 }
