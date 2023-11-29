@@ -46,6 +46,7 @@ public class PublicationServiceImpl  implements PublicationService {
         Optional<PublicationEntity> publicationOptional = publicationRepository.findById(id);
         if (publicationOptional.isPresent()){
             PublicationEntity publication = publicationOptional.get();
+            incrementViewCount(id);
             return publicationMapper.toResponseDto(publication);
         }else{
             throw new PublicationNotExistException();
@@ -69,7 +70,7 @@ public class PublicationServiceImpl  implements PublicationService {
                 .collect(Collectors.toList());
     }
 
-    @Override
+
     public void incrementViewCount(Long id){
         Optional<PublicationEntity> publicationOptional = publicationRepository.findById(id);
         if (publicationOptional.isPresent()) {

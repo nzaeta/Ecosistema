@@ -12,7 +12,7 @@ public interface PublicationService {
     PublicationResponseDto getById(Long id);
     List<PublicationResponseDto> getByDeletedFalse();
     List<PublicationResponseDto> getByUsuarioId(Long user_id);
-    void incrementViewCount(Long id);
+//    void incrementViewCount(Long id);
     PublicationResponseDto save(PublicationRequestDto publicationRequestDto);
 
     PublicationResponseDto update(PublicationRequestDto publicationRequestDto);
