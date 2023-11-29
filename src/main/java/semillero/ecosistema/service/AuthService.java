@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.server.ResponseStatusException;
-import semillero.ecosistema.dto.AuthResponse;
+import semillero.ecosistema.Dto.AuthResponse;
 //import semillero.ecosistema.entity.UserEntity;
 import semillero.ecosistema.entity.UserEntity;
 import semillero.ecosistema.jwt.JwtService;

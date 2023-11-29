@@ -39,8 +39,25 @@ public class ProviderServiceImpl implements ProviderService {
     }
 
     @Override
+    public List<ProviderResponseDto> getAccepted() {
+        List<ProviderEntity> providerEntityList = providerRepository.listarAceptados();
+        List<ProviderResponseDto> providerResponseDtoList = providerMapper.toDtoList(providerEntityList);
+        mapperParamsProvider(providerEntityList, providerResponseDtoList);
+        return providerResponseDtoList;
+    }
+
+    @Override
     public List<ProviderResponseDto> getByName(String name) {
-        List<ProviderEntity> providerEntityList = providerRepository.findByName(name);
+        List<ProviderEntity> providerEntityList = providerRepository.searchProviderByName(name);
+        List<ProviderResponseDto> providerResponseDtoList = providerMapper.toDtoList(providerEntityList);
+
+        mapperParamsProvider(providerEntityList, providerResponseDtoList);
+        return providerResponseDtoList;
+    }
+
+    @Override
+    public List<ProviderResponseDto> getByCategory(String categoria) {
+        List<ProviderEntity> providerEntityList = providerRepository.listarPorCategoria(categoria);
         List<ProviderResponseDto> providerResponseDtoList = providerMapper.toDtoList(providerEntityList);
 
         mapperParamsProvider(providerEntityList, providerResponseDtoList);
