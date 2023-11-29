@@ -134,7 +134,7 @@ public class ProviderController {
      */
     @Secured("ADMIN")
     @PatchMapping("/update-status")
-    public ResponseEntity<?> updateStatus(@RequestBody ProviderUpdateStatusRequestDto providerUpdateStatusRequestDto) {
+    public ResponseEntity<?> updateStatus(@RequestBody  @Valid ProviderUpdateStatusRequestDto providerUpdateStatusRequestDto) {
         try {
             if(providerUpdateStatusRequestDto == null) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -147,7 +147,7 @@ public class ProviderController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> update(@RequestBody ProviderUpdateRequestDto providerUpdateRequestDto) {
+    public ResponseEntity<?> update(@RequestBody @Valid ProviderUpdateRequestDto providerUpdateRequestDto) {
 
         try {
             if(providerUpdateRequestDto == null) {

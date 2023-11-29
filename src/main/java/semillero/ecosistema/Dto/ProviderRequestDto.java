@@ -53,8 +53,5 @@ public class ProviderRequestDto {
     private Boolean deleted;
     private String status;
     private Boolean openFullImage;
-
-//    @NotEmpty (message = "Campo obligatorio.")
-//    @Size(min = 20, max = 300, message = "Debe contener entre 20 y 300 caracteres.")
     private String feedBack;
 }
