@@ -1,4 +1,4 @@
-package semillero.ecosistema.dto;
+package semillero.ecosistema.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

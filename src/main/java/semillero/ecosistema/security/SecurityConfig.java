@@ -32,7 +32,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authRequest ->
                         authRequest
                                 .requestMatchers("/googleLogin/**").permitAll()
-//                                .anyRequest().permitAll()
+                                .requestMatchers("/provider/accepted").permitAll()
+                                .requestMatchers("/provider/get-name").permitAll()
+                                .requestMatchers("/provider/get-category").permitAll()
+                                .requestMatchers("/category/all").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManager->
