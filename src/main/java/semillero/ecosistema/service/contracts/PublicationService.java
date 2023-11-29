@@ -14,7 +14,9 @@ public interface PublicationService {
     List<PublicationResponseDto> getByUsuarioId(Long user_id);
     void incrementViewCount(Long id);
     PublicationResponseDto save(PublicationRequestDto publicationRequestDto);
-//
-//    PublicationEntity update(PublicationEntity publicationEntity);
+
+    PublicationResponseDto update(PublicationRequestDto publicationRequestDto);
+
+    void delete(Long id);
 
 }

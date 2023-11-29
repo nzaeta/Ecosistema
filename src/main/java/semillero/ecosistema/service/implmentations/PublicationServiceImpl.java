@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 import semillero.ecosistema.dto.PublicationRequestDto;
 import semillero.ecosistema.dto.PublicationResponseDto;
 import semillero.ecosistema.entity.PublicationEntity;
+import semillero.ecosistema.entity.UserEntity;
 import semillero.ecosistema.exception.PublicationNotExistException;
 import semillero.ecosistema.mapper.PublicationMapper;
 import semillero.ecosistema.repository.PublicationRepository;
+import semillero.ecosistema.repository.UserRepository;
 import semillero.ecosistema.service.contracts.PublicationService;
 
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 public class PublicationServiceImpl  implements PublicationService {
     private final PublicationRepository publicationRepository;
     private final PublicationMapper publicationMapper;
+    private final UserRepository userRepository;
 
     @Override
     public List<PublicationResponseDto> getAll() {
@@ -80,8 +83,47 @@ public class PublicationServiceImpl  implements PublicationService {
 
     @Override
     public PublicationResponseDto save(PublicationRequestDto publicationRequestDto){
+        Long user_id = publicationRequestDto.getUser_id();
+        Optional<UserEntity> userEntityOptional = userRepository.findById(user_id);
+        UserEntity userEntity = null;
+        if (userEntityOptional.isPresent()) {
+            userEntity = userEntityOptional.get();
+        }
         PublicationEntity publicationEntity = publicationMapper.toEntity(publicationRequestDto);
+        publicationEntity.setUsuarioCreador(userEntity);
         PublicationEntity savedPublication = publicationRepository.save(publicationEntity);
         return publicationMapper.toResponseDto(savedPublication);
+    }
+
+    @Override
+    public  PublicationResponseDto update(PublicationRequestDto publicationRequestDto){
+        Optional<PublicationEntity> publicationEntityOptional = publicationRepository.findById(publicationRequestDto.getId());
+
+        if (!publicationEntityOptional.isPresent()) {
+            throw new PublicationNotExistException();
+        }
+
+        PublicationEntity publicationEntity = publicationEntityOptional.get();
+        publicationEntity.setTitulo(publicationRequestDto.getTitulo());
+        publicationEntity.setDescripcion(publicationRequestDto.getDescripcion());
+        publicationEntity.setFechaCreacion(publicationRequestDto.getFechaCreacion());
+        publicationEntity.setImagenes(publicationRequestDto.getImagenes());
+        publicationEntity.setCantVisualizaciones(publicationRequestDto.getCantVisualizaciones());
+
+        publicationEntity = publicationRepository.save(publicationEntity);
+
+        return publicationMapper.toResponseDto(publicationEntity);
+    }
+
+    @Override
+    public void delete(Long id){
+        Optional<PublicationEntity> publicationEntityOptional = publicationRepository.findById(id);
+
+        if (!publicationEntityOptional.isPresent()) {
+            throw new PublicationNotExistException();
+        }
+        PublicationEntity publicationEntity = publicationEntityOptional.get();
+        publicationEntity.setDeleted(true);
+        publicationRepository.save(publicationEntity);
     }
 }

@@ -19,16 +19,13 @@ public interface PublicationMapper {
     @Mapping(target = "usuarioCreador", ignore = true)
     PublicationEntity toEntity(PublicationRequestDto publicationDto);
 
-    @AfterMapping
-    default void setUser(PublicationRequestDto publicationDto, @MappingTarget PublicationEntity publicationEntity, UserRepository userRepository){
-        if(publicationDto.getUser_id() != null){
-            UserEntity userEntity = userRepository.findById(publicationDto.getUser_id()).orElse(null);
-            publicationEntity.setUsuarioCreador(userEntity);
-        }
-    }
-
-    @Mapping(target = "user_id", ignore = true)
-    PublicationRequestDto toDto(PublicationEntity publicationEntity);
+//    @AfterMapping
+//    default void setUser(PublicationRequestDto publicationDto, @MappingTarget PublicationEntity publicationEntity, UserRepository userRepository){
+//        if(publicationDto.getUser_id() != null){
+//            UserEntity userEntity = userRepository.findById(publicationDto.getUser_id()).orElse(null);
+//            publicationEntity.setUsuarioCreador(userEntity);
+//        }
+//    }
 
     @Mapping(target = "userName", ignore = true)
     PublicationResponseDto toResponseDto(PublicationEntity publicationEntity);
@@ -39,5 +36,5 @@ public interface PublicationMapper {
             publicationResponseDto.setUserName(publicationEntity.getUsuarioCreador().getNombre());
         }
     }
-    List<PublicationResponseDto> toDtoList(List<PublicationEntity> publicationEntityList);
+
 }
