@@ -22,30 +22,25 @@ public class PublicationController {
         this.publicationService = publicationService;
     }
 
-    @Secured("ADMIN")
     @GetMapping
     public List<PublicationResponseDto> getAllPublications() { return publicationService.getAll();
     }
 
-    @Secured("ADMIN")
     @GetMapping("/get-titulo")
     public PublicationResponseDto getByTitulo(@RequestParam String titulo){
         return publicationService.getByTitulo(titulo);
     }
 
-    @Secured("ADMIN")
     @GetMapping("/get-id")
     public PublicationResponseDto getById(@RequestParam Long id){
         return publicationService.getById(id);
     }
 
-    @Secured("ADMIN")
     @GetMapping("/get-not-deleted")
     public List<PublicationResponseDto> getNotDeleted(){
         return publicationService.getByDeletedFalse();
     }
 
-    @Secured("ADMIN")
     @GetMapping("/get-user-id")
     public List<PublicationResponseDto> getByUserId (Long user_id){
         return publicationService.getByUsuarioId(user_id);
