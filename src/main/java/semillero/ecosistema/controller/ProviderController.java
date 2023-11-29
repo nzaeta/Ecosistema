@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import semillero.ecosistema.Dto.ProviderRequestDto;
 import semillero.ecosistema.Dto.ProviderResponseDto;
+import semillero.ecosistema.Dto.ProviderUpdateRequestDto;
+import semillero.ecosistema.Dto.ProviderUpdateStatusRequestDto;
 import semillero.ecosistema.entity.ProviderEntity;
 import semillero.ecosistema.exception.*;
 import semillero.ecosistema.service.contracts.ProviderService;
@@ -108,22 +110,58 @@ public class ProviderController {
         }
     }
 
-//    @PutMapping("/update")
-//    public ResponseEntity<?> update(@RequestParam Long id, @RequestBody ProviderEntity providerEntity) {
-//
-//        try {
-//            if(id == null || providerEntity == null) {
-//                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-//            }
-//            return ResponseEntity.status(HttpStatus.OK).body(providerService.update(id,providerEntity));
-//        } catch (UserNotExistException userNotExistException) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageErrorResponse("El usuario ingresado no existe"));
-//        } catch (ProviderNotExistException providerNotExistException) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageErrorResponse("El proveedor no existe"));
-//        } catch (ResponseStatusException e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//    }
+    /**
+     * Listar los proveedores segun su estado
+     * ESTADOS -> REVISION_INICIAL, CAMBIOS_REALIZADOS
+     */
+    @Secured("ADMIN")
+    @GetMapping("/get-status")
+    public ResponseEntity<List<ProviderResponseDto>> getByStatus() {
+        List<ProviderResponseDto> providerResponseDtoList = providerService.getByStatus();
+        try {
+            if(providerResponseDtoList.size() == 0) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
+
+            return ResponseEntity.ok(providerResponseDtoList);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    /**
+     * ESTADOS -> REVISION_INICIAL, ACEPTADO, DENEGADO, REQUIERE_CAMBIOS, CAMBIOS_REALIZADOS
+     */
+    @Secured("ADMIN")
+    @PatchMapping("/update-status")
+    public ResponseEntity<?> updateStatus(@RequestBody ProviderUpdateStatusRequestDto providerUpdateStatusRequestDto) {
+        try {
+            if(providerUpdateStatusRequestDto == null) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
+            return new ResponseEntity<>(providerService.updateStatus(providerUpdateStatusRequestDto) ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> update(@RequestBody ProviderUpdateRequestDto providerUpdateRequestDto) {
+
+        try {
+            if(providerUpdateRequestDto == null) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(providerService.update(providerUpdateRequestDto));
+        } catch (UserNotExistException userNotExistException) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageErrorResponse("El usuario ingresado no existe"));
+        } catch (ProviderNotExistException providerNotExistException) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageErrorResponse("El proveedor no existe"));
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 
     private ErrorResponse messageErrorResponse(String message) {
         return new ErrorResponse(message);
