@@ -27,25 +27,25 @@ public class PublicationController {
     public List<PublicationResponseDto> getAllPublications() { return publicationService.getAll();
     }
 
-    @Secured("USER")
+    @Secured("ADMIN")
     @GetMapping("/get-titulo")
     public PublicationResponseDto getByTitulo(@RequestParam String titulo){
         return publicationService.getByTitulo(titulo);
     }
 
-    @Secured("USER")
+    @Secured("ADMIN")
     @GetMapping("/get-id")
     public PublicationResponseDto getById(@RequestParam Long id){
         return publicationService.getById(id);
     }
 
-    @Secured("USER")
+    @Secured("ADMIN")
     @GetMapping("/get-not-deleted")
     public List<PublicationResponseDto> getNotDeleted(){
         return publicationService.getByDeletedFalse();
     }
 
-    @Secured("USER")
+    @Secured("ADMIN")
     @GetMapping("/get-user-id")
     public List<PublicationResponseDto> getByUserId (Long user_id){
         return publicationService.getByUsuarioId(user_id);
@@ -57,19 +57,19 @@ public class PublicationController {
         publicationService.incrementViewCount(id);
     }
 
-    @Secured("USER")
+    @Secured("ADMIN")
     @PostMapping("/save")
     public PublicationResponseDto save(@RequestBody PublicationRequestDto publicationRequestDto){
         return publicationService.save(publicationRequestDto);
     }
 
-    @Secured("USER")
+    @Secured("ADMIN")
     @PatchMapping("/update")
     public PublicationResponseDto update(@RequestBody PublicationRequestDto publicationRequestDto){
         return publicationService.update(publicationRequestDto);
     }
 
-    @Secured("USER")
+    @Secured("ADMIN")
     @PatchMapping("/delete")
     public void delete(@RequestParam Long id){
         publicationService.delete(id);
