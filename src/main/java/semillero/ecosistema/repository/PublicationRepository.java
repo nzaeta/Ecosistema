@@ -9,9 +9,9 @@ import java.util.List;
 
 @Repository
 public interface PublicationRepository extends JpaRepository<PublicationEntity, Long> {
-    PublicationEntity findByTitulo(String titulo);
+    PublicationEntity findByTitle(String title);
     List<PublicationEntity> findByUsuarioCreadorId(Long user_id);
-    List<PublicationEntity> findByDeletedFalse();
+    List<PublicationEntity> findByHiddenFalse();
 
 
 }

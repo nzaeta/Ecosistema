@@ -45,12 +45,11 @@ public class PublicationController {
     public List<PublicationResponseDto> getByUserId (Long user_id){
         return publicationService.getByUsuarioId(user_id);
     }
-//
-//    @Secured("ADMIN")
-//    @PatchMapping("/increment-view")
-//    public void incrementView(@RequestParam Long id){
-//        publicationService.incrementViewCount(id);
-//    }
+
+    @PatchMapping("/increment-view")
+    public void incrementView(@RequestParam Long id){
+        publicationService.incrementViewCount(id);
+    }
 
     @Secured("ADMIN")
     @PostMapping("/save")

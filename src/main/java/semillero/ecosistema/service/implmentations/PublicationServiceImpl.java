@@ -12,6 +12,7 @@ import semillero.ecosistema.repository.PublicationRepository;
 import semillero.ecosistema.repository.UserRepository;
 import semillero.ecosistema.service.contracts.PublicationService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,7 +34,7 @@ public class PublicationServiceImpl  implements PublicationService {
 
     @Override
     public PublicationResponseDto getByTitulo(String titulo){
-        PublicationEntity publication = publicationRepository.findByTitulo(titulo);
+        PublicationEntity publication = publicationRepository.findByTitle(titulo);
         if (publication != null){
             return publicationMapper.toResponseDto(publication);
         }else{
@@ -56,7 +57,7 @@ public class PublicationServiceImpl  implements PublicationService {
 
     @Override
     public List<PublicationResponseDto> getByDeletedFalse(){
-        List<PublicationEntity> publications = publicationRepository.findByDeletedFalse();
+        List<PublicationEntity> publications = publicationRepository.findByHiddenFalse();
         return publications.stream()
                 .map(publicationMapper::toResponseDto)
                 .collect(Collectors.toList());
@@ -71,11 +72,12 @@ public class PublicationServiceImpl  implements PublicationService {
     }
 
 
+    @Override
     public void incrementViewCount(Long id){
         Optional<PublicationEntity> publicationOptional = publicationRepository.findById(id);
         if (publicationOptional.isPresent()) {
             PublicationEntity publication = publicationOptional.get();
-            publication.setCantVisualizaciones(publication.getCantVisualizaciones() + 1);
+            publication.setVisualizations(publication.getVisualizations() + 1);
             publicationRepository.save(publication);
         } else {
             throw new PublicationNotExistException();
@@ -103,13 +105,13 @@ public class PublicationServiceImpl  implements PublicationService {
         if (!publicationEntityOptional.isPresent()) {
             throw new PublicationNotExistException();
         }
-
+        List<String> images = new ArrayList<>();
         PublicationEntity publicationEntity = publicationEntityOptional.get();
-        publicationEntity.setTitulo(publicationRequestDto.getTitulo());
-        publicationEntity.setDescripcion(publicationRequestDto.getDescripcion());
-        publicationEntity.setFechaCreacion(publicationRequestDto.getFechaCreacion());
-        publicationEntity.setImagenes(publicationRequestDto.getImagenes());
-        publicationEntity.setCantVisualizaciones(publicationRequestDto.getCantVisualizaciones());
+        publicationEntity.setTitle(publicationRequestDto.getTitle());
+        publicationEntity.setContent(publicationRequestDto.getContent());
+        publicationEntity.setDate(publicationRequestDto.getDate());
+        publicationEntity.setImages(images);
+        publicationEntity.setVisualizations(publicationRequestDto.getVisualizations());
 
         publicationEntity = publicationRepository.save(publicationEntity);
 
@@ -124,7 +126,7 @@ public class PublicationServiceImpl  implements PublicationService {
             throw new PublicationNotExistException();
         }
         PublicationEntity publicationEntity = publicationEntityOptional.get();
-        publicationEntity.setDeleted(true);
+        publicationEntity.setHidden(true);
         publicationRepository.save(publicationEntity);
     }
 }

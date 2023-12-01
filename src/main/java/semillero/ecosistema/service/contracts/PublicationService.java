@@ -19,4 +19,6 @@ public interface PublicationService {
 
     void delete(Long id);
 
+    void incrementViewCount(Long id);
+
 }

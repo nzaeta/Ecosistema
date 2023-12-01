@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,15 +18,21 @@ public class PublicationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String titulo;
-    @Column(length = 2500)
-    private String descripcion;
-    private boolean deleted;
+    @Column(name="titulo")
+    private String title;
+    @Column(name="descripcion", length = 2500)
+    private String content;
+    @Column(name="deleted")
+    private boolean hidden;
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaCreacion;
-    private String imagenes;
+    @Column(name="fecha_creacion")
+    private Date date;
+    @ElementCollection
+    @Column(name="imagenes")
+    private List<String> images = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity usuarioCreador;
-    private int cantVisualizaciones;
+    @Column(name="cant_visualizaciones")
+    private int visualizations;
 }
