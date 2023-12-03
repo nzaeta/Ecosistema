@@ -1,5 +1,6 @@
 package semillero.ecosistema.service.contracts;
 
+import org.springframework.http.ResponseEntity;
 import semillero.ecosistema.dto.PublicationRequestDto;
 import semillero.ecosistema.dto.PublicationResponseDto;
 import semillero.ecosistema.entity.PublicationEntity;
@@ -7,18 +8,14 @@ import semillero.ecosistema.entity.PublicationEntity;
 import java.util.List;
 
 public interface PublicationService {
-    List<PublicationResponseDto> getAll();
-    PublicationResponseDto getByTitulo(String titulo);
-    PublicationResponseDto getById(Long id);
-    List<PublicationResponseDto> getByDeletedFalse();
-    List<PublicationResponseDto> getByUsuarioId(Long user_id);
-//    void incrementViewCount(Long id);
-    PublicationResponseDto save(PublicationRequestDto publicationRequestDto);
-
-    PublicationResponseDto update(PublicationRequestDto publicationRequestDto);
-
-    void delete(Long id);
-
+    ResponseEntity<?> getAll();
+    ResponseEntity<?> getByTitle(String title);
+    ResponseEntity<?> getById(Long id);
+    ResponseEntity<?> getByDeletedFalse();
+    ResponseEntity<?> getByUsuarioId(Long user_id);
+    ResponseEntity<?> save(PublicationRequestDto publicationRequestDto);
+    ResponseEntity<?> update(PublicationRequestDto publicationRequestDto);
+    ResponseEntity<?> delete(Long id);
     void incrementViewCount(Long id);
 
 }

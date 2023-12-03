@@ -1,17 +1,24 @@
 package semillero.ecosistema.service.implmentations;
 
+import com.mysql.cj.log.Log;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import semillero.ecosistema.dto.PublicationRequestDto;
 import semillero.ecosistema.dto.PublicationResponseDto;
 import semillero.ecosistema.entity.PublicationEntity;
 import semillero.ecosistema.entity.UserEntity;
+import semillero.ecosistema.exception.PublicationExistException;
 import semillero.ecosistema.exception.PublicationNotExistException;
+import semillero.ecosistema.exception.UserNotExistException;
 import semillero.ecosistema.mapper.PublicationMapper;
 import semillero.ecosistema.repository.PublicationRepository;
 import semillero.ecosistema.repository.UserRepository;
 import semillero.ecosistema.service.contracts.PublicationService;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,108 +32,153 @@ public class PublicationServiceImpl  implements PublicationService {
     private final UserRepository userRepository;
 
     @Override
-    public List<PublicationResponseDto> getAll() {
-        List<PublicationEntity> publications = publicationRepository.findAll();
-        return publications.stream()
-                .map(publicationMapper::toResponseDto)
-                .collect(Collectors.toList());
-    }
+    public ResponseEntity<?> getAll() {
+        try {
+            List<PublicationEntity> publications = publicationRepository.findAll();
+            List<PublicationResponseDto> publicationsDto = publications.stream()
+                    .map(publicationMapper::toResponseDto)
+                    .collect(Collectors.toList());
 
-    @Override
-    public PublicationResponseDto getByTitulo(String titulo){
-        PublicationEntity publication = publicationRepository.findByTitle(titulo);
-        if (publication != null){
-            return publicationMapper.toResponseDto(publication);
-        }else{
-            throw new PublicationNotExistException();
+            if(publicationsDto.isEmpty()){
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(publicationsDto);
+        } catch (Exception e){
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @Override
-    public PublicationResponseDto getById(Long id){
-        Optional<PublicationEntity> publicationOptional = publicationRepository.findById(id);
-        if (publicationOptional.isPresent()){
-            PublicationEntity publication = publicationOptional.get();
-            incrementViewCount(id);
-            return publicationMapper.toResponseDto(publication);
-        }else{
-            throw new PublicationNotExistException();
+    public ResponseEntity<?> getByTitle(String title){
+        try {
+            PublicationEntity publication = publicationRepository.findByTitle(title);
+            if (publication == null) {
+                throw new PublicationNotExistException();
+            }
+            PublicationResponseDto publicationDto = publicationMapper.toResponseDto(publication);
+            return ResponseEntity.ok(publicationDto);
+        }catch (PublicationNotExistException e){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("The publication does not exist with this title: " + title);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Internal Error");
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> getById(Long id){
+        try {
+            PublicationEntity publication = publicationRepository.findById(id)
+                    .orElseThrow(PublicationNotExistException::new);
+            PublicationResponseDto publicationDto = publicationMapper.toResponseDto(publication);
+            return ResponseEntity.ok(publicationDto);
+        }catch (PublicationNotExistException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("The publication does not exist with this ID: " + id);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Internal Error");
         }
 
     }
 
     @Override
-    public List<PublicationResponseDto> getByDeletedFalse(){
-        List<PublicationEntity> publications = publicationRepository.findByHiddenFalse();
-        return publications.stream()
-                .map(publicationMapper::toResponseDto)
-                .collect(Collectors.toList());
+    public ResponseEntity<?> getByDeletedFalse(){
+        try {
+            List<PublicationEntity> publications = publicationRepository.findByHiddenFalse();
+            List<PublicationResponseDto> publicationsDto = publications.stream()
+                    .map(publicationMapper::toResponseDto)
+                    .collect(Collectors.toList());
+            if(publicationsDto.isEmpty()){
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(publicationsDto);
+        }catch (Exception e){
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @Override
-    public List<PublicationResponseDto> getByUsuarioId(Long user_id){
-        List<PublicationEntity> publications = publicationRepository.findByUsuarioCreadorId(user_id);
-        return publications.stream()
-                .map(publicationMapper::toResponseDto)
-                .collect(Collectors.toList());
-    }
+    public ResponseEntity<?> getByUsuarioId(Long user_id){
+        try {
+            List<PublicationEntity> publications = publicationRepository.findByUsuarioCreadorId(user_id);
+            List<PublicationResponseDto> publicationsDto = publications.stream()
+                    .map(publicationMapper::toResponseDto)
+                    .collect(Collectors.toList());
+            if(publicationsDto.isEmpty()){
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(publicationsDto);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
 
+    }
 
     @Override
     public void incrementViewCount(Long id){
-        Optional<PublicationEntity> publicationOptional = publicationRepository.findById(id);
-        if (publicationOptional.isPresent()) {
-            PublicationEntity publication = publicationOptional.get();
+            PublicationEntity publication = publicationRepository.findById(id)
+                    .orElseThrow(PublicationNotExistException::new);
             publication.setVisualizations(publication.getVisualizations() + 1);
             publicationRepository.save(publication);
-        } else {
-            throw new PublicationNotExistException();
+    }
+
+    @Override
+    public ResponseEntity<?> save(PublicationRequestDto publicationRequestDto){
+        try {
+            UserEntity user = userRepository.findById(publicationRequestDto.getUser_id())
+                    .orElseThrow(UserNotExistException::new);
+            PublicationEntity publication = publicationMapper.toEntity(publicationRequestDto);
+            publication.setUsuarioCreador(user);
+            publicationRepository.save(publication);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        }catch (UserNotExistException e){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("User ID not found");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @Override
-    public PublicationResponseDto save(PublicationRequestDto publicationRequestDto){
-        Long user_id = publicationRequestDto.getUser_id();
-        Optional<UserEntity> userEntityOptional = userRepository.findById(user_id);
-        UserEntity userEntity = null;
-        if (userEntityOptional.isPresent()) {
-            userEntity = userEntityOptional.get();
+    public ResponseEntity<?> update(PublicationRequestDto publicationRequestDto){
+        try {
+            PublicationEntity publication = publicationRepository.findById(publicationRequestDto.getId())
+                    .orElseThrow(PublicationNotExistException::new);
+
+            List<String> images = new ArrayList<>();
+            publication.setTitle(publicationRequestDto.getTitle());
+            publication.setContent(publicationRequestDto.getContent());
+            publication.setDate(publicationRequestDto.getDate());
+            publication.setImages(images);
+            publication.setVisualizations(publicationRequestDto.getVisualizations());
+
+            publicationRepository.save(publication);
+
+            return ResponseEntity.ok().body("UPDATED");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        PublicationEntity publicationEntity = publicationMapper.toEntity(publicationRequestDto);
-        publicationEntity.setUsuarioCreador(userEntity);
-        PublicationEntity savedPublication = publicationRepository.save(publicationEntity);
-        return publicationMapper.toResponseDto(savedPublication);
+
+
+
     }
 
     @Override
-    public  PublicationResponseDto update(PublicationRequestDto publicationRequestDto){
-        Optional<PublicationEntity> publicationEntityOptional = publicationRepository.findById(publicationRequestDto.getId());
-
-        if (!publicationEntityOptional.isPresent()) {
-            throw new PublicationNotExistException();
+    public ResponseEntity<?> delete(Long id){
+        try {
+            PublicationEntity publication = publicationRepository.findById(id)
+                    .orElseThrow(PublicationNotExistException::new);
+            publication.setHidden(true);
+            publicationRepository.save(publication);
+            return ResponseEntity.status(HttpStatus.OK).body("HIDDEN");
+        }catch (PublicationNotExistException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Publication Not Found");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        List<String> images = new ArrayList<>();
-        PublicationEntity publicationEntity = publicationEntityOptional.get();
-        publicationEntity.setTitle(publicationRequestDto.getTitle());
-        publicationEntity.setContent(publicationRequestDto.getContent());
-        publicationEntity.setDate(publicationRequestDto.getDate());
-        publicationEntity.setImages(images);
-        publicationEntity.setVisualizations(publicationRequestDto.getVisualizations());
-
-        publicationEntity = publicationRepository.save(publicationEntity);
-
-        return publicationMapper.toResponseDto(publicationEntity);
-    }
-
-    @Override
-    public void delete(Long id){
-        Optional<PublicationEntity> publicationEntityOptional = publicationRepository.findById(id);
-
-        if (!publicationEntityOptional.isPresent()) {
-            throw new PublicationNotExistException();
-        }
-        PublicationEntity publicationEntity = publicationEntityOptional.get();
-        publicationEntity.setHidden(true);
-        publicationRepository.save(publicationEntity);
     }
 }
