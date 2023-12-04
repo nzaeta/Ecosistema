@@ -70,7 +70,7 @@ public class ProviderServiceImpl implements ProviderService {
             providerEntityList.stream().filter(providerEntity -> providerEntity.getId() == providerResponseDto.getId())
                     .forEach(provider -> {
                         String categoryName = provider.getCategory().getNombre();
-                        String countryName = provider.getCountry().getNombre();
+                        String countryName = provider.getCountry().getName();
                         String provinceName = provider.getProvince().getNombre();
 
                         providerResponseDto.setCategoryName(categoryName);

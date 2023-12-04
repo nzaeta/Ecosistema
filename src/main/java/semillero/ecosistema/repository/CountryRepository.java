@@ -6,5 +6,5 @@ import semillero.ecosistema.entity.CountryEntity;
 
 @Repository
 public interface CountryRepository extends JpaRepository<CountryEntity,Long> {
-    CountryEntity findByNombre(String nombre);
+    CountryEntity findByName(String nanme);
 }
