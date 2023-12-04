@@ -71,7 +71,7 @@ public class ProviderServiceImpl implements ProviderService {
                     .forEach(provider -> {
                         String categoryName = provider.getCategory().getNombre();
                         String countryName = provider.getCountry().getName();
-                        String provinceName = provider.getProvince().getNombre();
+                        String provinceName = provider.getProvince().getName();
 
                         providerResponseDto.setCategoryName(categoryName);
                         providerResponseDto.setCountryName(countryName);

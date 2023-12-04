@@ -1,15 +1,16 @@
 package semillero.ecosistema.service.contracts;
 
+import org.springframework.http.ResponseEntity;
 import semillero.ecosistema.entity.ProvinceEntity;
 
 import java.util.List;
 
 public interface ProvinceService {
-    List<ProvinceEntity> getAll();
-    ProvinceEntity getByNombre(String nombre);
-    List<ProvinceEntity> getByPais(Long pais_id);
-    ProvinceEntity save(ProvinceEntity provinceEntity);
-    ProvinceEntity update(String nameProvince, ProvinceEntity provinceEntity);
+    ResponseEntity<?> getAll();
+    ResponseEntity<?> getByName(String name);
+    ResponseEntity<?> getByCountryId(Long country_id);
+    ResponseEntity<?> save(ProvinceEntity provinceEntity);
+    ResponseEntity<?> update( ProvinceEntity provinceEntity);
 
 
 }

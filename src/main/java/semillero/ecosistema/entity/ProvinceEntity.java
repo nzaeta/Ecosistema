@@ -14,8 +14,9 @@ public class ProvinceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nombre;
+    @Column(name = "nombre")
+    private String name;
     @ManyToOne
     @JoinColumn(name = "pais_id")
-    private CountryEntity pais;
+    private CountryEntity country;
 }
