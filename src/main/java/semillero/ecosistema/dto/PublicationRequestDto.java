@@ -16,6 +16,6 @@ public class PublicationRequestDto {
     private String content;
     private boolean hidden;
     private Date date;
-    private List<ArrayList> images;
+    private List<String> images;
     private int visualizations;
 }
