@@ -15,7 +15,6 @@ import semillero.ecosistema.repository.*;
 import semillero.ecosistema.service.contracts.ProviderService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

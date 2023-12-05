@@ -11,7 +11,6 @@ import semillero.ecosistema.Dto.ProviderRequestDto;
 import semillero.ecosistema.Dto.ProviderResponseDto;
 import semillero.ecosistema.Dto.ProviderUpdateRequestDto;
 import semillero.ecosistema.Dto.ProviderUpdateStatusRequestDto;
-import semillero.ecosistema.entity.ProviderEntity;
 import semillero.ecosistema.exception.*;
 import semillero.ecosistema.service.contracts.ProviderService;
 

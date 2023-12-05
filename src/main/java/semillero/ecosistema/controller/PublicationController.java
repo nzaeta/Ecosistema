@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-import semillero.ecosistema.dto.PublicationRequestDto;
-import semillero.ecosistema.dto.PublicationResponseDto;
+import semillero.ecosistema.Dto.PublicationRequestDto;
+import semillero.ecosistema.Dto.PublicationResponseDto;
 import semillero.ecosistema.entity.PublicationEntity;
 import semillero.ecosistema.service.contracts.PublicationService;
 

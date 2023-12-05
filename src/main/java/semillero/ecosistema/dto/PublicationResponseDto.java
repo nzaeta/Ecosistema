@@ -1,9 +1,8 @@
-package semillero.ecosistema.dto;
+package semillero.ecosistema.Dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import semillero.ecosistema.entity.PublicationEntity;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,7 +18,7 @@ public class PublicationResponseDto {
     private String content;
     private boolean hidden;
     private Date date;
-    private List<ArrayList> images;
+    private List<String> images;
     private int visualizations;
 
 
