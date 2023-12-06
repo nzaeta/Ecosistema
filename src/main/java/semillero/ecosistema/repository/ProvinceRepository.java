@@ -7,7 +7,7 @@ import semillero.ecosistema.entity.ProvinceEntity;
 import java.util.List;
 
 @Repository
-public interface ProvinceRepository extends JpaRepository<ProvinceEntity, Long> {
+public interface ProvinceRepository extends JpaRepository<ProvinceEntity, String> {
     ProvinceEntity findByName(String name);
-    List<ProvinceEntity> findByCountryId(Long country_id);
+    List<ProvinceEntity> findByCountryId(String country_id);
 }

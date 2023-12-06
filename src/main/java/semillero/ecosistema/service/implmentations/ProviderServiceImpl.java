@@ -81,7 +81,7 @@ public class ProviderServiceImpl implements ProviderService {
 
 
     @Override
-    public ProviderEntity save(Long userId, ProviderRequestDto providerRequestDto) {
+    public ProviderEntity save(String userId, ProviderRequestDto providerRequestDto) {
         UserEntity userEntity = getUsersById(userId);
         validateMaxProviders(userEntity);
 
@@ -106,7 +106,7 @@ public class ProviderServiceImpl implements ProviderService {
      * @param userId Id de usuario a buscar
      * @return UserEntity encontrado
      */
-    private UserEntity getUsersById(Long userId) {
+    private UserEntity getUsersById(String userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotExistException());
     }
@@ -200,20 +200,20 @@ public class ProviderServiceImpl implements ProviderService {
         return value != null ? value : defaultValue;
     }
 
-    private CategoryEntity getCategoryById(Long categoryId) {
+    private CategoryEntity getCategoryById(String categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotExistException());
     }
 
-    private CountryEntity getCountryById(Long countryId) {
+    private CountryEntity getCountryById(String countryId) {
         return countryRepository.findById(countryId).orElseThrow(() -> new CountryNotExistException());
     }
 
-    private ProvinceEntity getProvinceById(Long provinceId) {
+    private ProvinceEntity getProvinceById(String provinceId) {
         return provinceRepository.findById(provinceId).orElseThrow(() -> new ProvinceNotExistException());
     }
 
-    private ProviderEntity getProviderById(Long providerId) {
+    private ProviderEntity getProviderById(String providerId) {
         return providerRepository.findById(providerId).orElse(null);
     }
 

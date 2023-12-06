@@ -10,8 +10,8 @@ import java.util.List;
 @Getter
 @Setter
 public class PublicationRequestDto {
-    private Long id;
-    private Long user_id;
+    private String id;
+    private String user_id;
     private String title;
     private String content;
     private boolean hidden;

@@ -48,7 +48,7 @@ public class ProvinceServiceImpl implements ProvinceService {
     }
 
     @Override
-    public ResponseEntity<?> getByCountryId(Long country_id){
+    public ResponseEntity<?> getByCountryId(String country_id){
         try {
             countryRepository.findById(country_id).orElseThrow(CountryNotExistException::new);
             List<ProvinceEntity> provinces = provinceRepository.findByCountryId(country_id);

@@ -9,7 +9,7 @@ import semillero.ecosistema.entity.ProviderEntity;
 import java.util.List;
 
 @Repository
-public interface ProviderRepository extends JpaRepository<ProviderEntity, Long> {
+public interface ProviderRepository extends JpaRepository<ProviderEntity, String> {
     List<ProviderEntity> findByName(String name);
     List<ProviderEntity> findByStatus(String status);
 

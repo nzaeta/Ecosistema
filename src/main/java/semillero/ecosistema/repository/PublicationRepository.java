@@ -8,9 +8,9 @@ import semillero.ecosistema.entity.UserEntity;
 import java.util.List;
 
 @Repository
-public interface PublicationRepository extends JpaRepository<PublicationEntity, Long> {
+public interface PublicationRepository extends JpaRepository<PublicationEntity, String> {
     PublicationEntity findByTitle(String title);
-    List<PublicationEntity> findByUsuarioCreadorId(Long user_id);
+    List<PublicationEntity> findByUsuarioCreadorId(String user_id);
     List<PublicationEntity> findByHiddenFalse();
 
 

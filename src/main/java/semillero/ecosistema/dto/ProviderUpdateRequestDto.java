@@ -9,10 +9,10 @@ import org.hibernate.validator.constraints.URL;
 @Setter
 public class ProviderUpdateRequestDto {
 
-    private Long id;
-    private Long categoryId;
-    private Long countryId; // pais ID
-    private Long provinceId; // provincia/estado ID
+    private String id;
+    private String categoryId;
+    private String countryId; // pais ID
+    private String provinceId; // provincia/estado ID
 
     @NotEmpty(message = "Campo obligatorio.")
     @Size(min = 2, max = 30, message = "Debe contener entre 2 y 30 caracteres.")
@@ -56,5 +56,5 @@ public class ProviderUpdateRequestDto {
     private Boolean openFullImage;
 
     private String feedBack;
-    private Long usersId;
+    private String usersId;
 }

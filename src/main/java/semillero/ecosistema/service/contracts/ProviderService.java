@@ -18,7 +18,7 @@ public interface ProviderService {
 
     List<ProviderResponseDto> getAccepted();
 
-    ProviderEntity save(Long userId, ProviderRequestDto providerRequestDto);
+    ProviderEntity save(String userId, ProviderRequestDto providerRequestDto);
 
     List<ProviderResponseDto> getByStatus();
     Boolean updateStatus(ProviderUpdateStatusRequestDto providerUpdateStatusRequestDto);

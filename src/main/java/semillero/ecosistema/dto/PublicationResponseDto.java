@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class PublicationResponseDto {
-    private Long id;
+    private String id;
     private String userName;
     private String title;
     private String content;

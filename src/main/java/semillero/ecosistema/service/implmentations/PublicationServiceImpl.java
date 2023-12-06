@@ -40,7 +40,8 @@ public class PublicationServiceImpl  implements PublicationService {
                     .collect(Collectors.toList());
 
             if(publicationsDto.isEmpty()){
-                return ResponseEntity.noContent().build();
+                List<?> listnull = new ArrayList<>();
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }
             return ResponseEntity.ok(publicationsDto);
         } catch (Exception e){
@@ -68,7 +69,7 @@ public class PublicationServiceImpl  implements PublicationService {
     }
 
     @Override
-    public ResponseEntity<?> getById(Long id){
+    public ResponseEntity<?> getById(String id){
         try {
             PublicationEntity publication = publicationRepository.findById(id)
                     .orElseThrow(PublicationNotExistException::new);
@@ -92,7 +93,8 @@ public class PublicationServiceImpl  implements PublicationService {
                     .map(publicationMapper::toResponseDto)
                     .collect(Collectors.toList());
             if(publicationsDto.isEmpty()){
-                return ResponseEntity.noContent().build();
+                List<?> listnull = new ArrayList<>();
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(listnull);
             }
             return ResponseEntity.ok(publicationsDto);
         }catch (Exception e){
@@ -102,7 +104,7 @@ public class PublicationServiceImpl  implements PublicationService {
     }
 
     @Override
-    public ResponseEntity<?> getByUsuarioId(Long user_id){
+    public ResponseEntity<?> getByUsuarioId(String user_id){
         try {
             List<PublicationEntity> publications = publicationRepository.findByUsuarioCreadorId(user_id);
             List<PublicationResponseDto> publicationsDto = publications.stream()
@@ -119,7 +121,7 @@ public class PublicationServiceImpl  implements PublicationService {
     }
 
     @Override
-    public void incrementViewCount(Long id){
+    public void incrementViewCount(String id){
             PublicationEntity publication = publicationRepository.findById(id)
                     .orElseThrow(PublicationNotExistException::new);
             publication.setVisualizations(publication.getVisualizations() + 1);
@@ -168,7 +170,7 @@ public class PublicationServiceImpl  implements PublicationService {
     }
 
     @Override
-    public ResponseEntity<?> delete(Long id){
+    public ResponseEntity<?> delete(String id){
         try {
             PublicationEntity publication = publicationRepository.findById(id)
                     .orElseThrow(PublicationNotExistException::new);

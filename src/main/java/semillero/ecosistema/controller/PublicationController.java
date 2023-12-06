@@ -31,7 +31,7 @@ public class PublicationController {
     }
 
     @GetMapping("/get-id")
-    ResponseEntity<?> getById(@RequestParam Long id){
+    ResponseEntity<?> getById(@RequestParam String id){
         return publicationService.getById(id);
     }
 
@@ -41,12 +41,12 @@ public class PublicationController {
     }
 
     @GetMapping("/get-user-id")
-    ResponseEntity<?> getByUserId (Long user_id){
+    ResponseEntity<?> getByUserId (String user_id){
         return publicationService.getByUsuarioId(user_id);
     }
 
     @PatchMapping("/increment-view")
-    void incrementView(@RequestParam Long id){
+    void incrementView(@RequestParam String id){
         publicationService.incrementViewCount(id);
     }
 
@@ -64,7 +64,7 @@ public class PublicationController {
 
     @Secured("ADMIN")
     @PatchMapping("/delete")
-    ResponseEntity<?> delete(@RequestParam Long id){
+    ResponseEntity<?> delete(@RequestParam String id){
         return publicationService.delete(id);
     }
 

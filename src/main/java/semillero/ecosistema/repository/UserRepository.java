@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity,Long> {
+public interface UserRepository extends JpaRepository<UserEntity,String> {
     List<UserEntity> findByNombreAndApellido(String nombre, String apellido);
     UserEntity findByEmail(String email);
     List<UserEntity> findByRol(String rol);

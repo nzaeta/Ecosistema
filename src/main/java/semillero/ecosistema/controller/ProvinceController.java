@@ -30,7 +30,7 @@ public class ProvinceController {
     }
 
     @GetMapping("/by-country")
-    ResponseEntity<?> getByCountryId(@RequestParam Long country_id){
+    ResponseEntity<?> getByCountryId(@RequestParam String country_id){
         return provinceService.getByCountryId(country_id);
     }
 

@@ -89,7 +89,7 @@ public class ProviderController {
     }
     //@Secured("USER")
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestParam Long id, @RequestBody @Valid ProviderRequestDto providerEntity) {
+    public ResponseEntity<?> save(@RequestParam String id, @RequestBody @Valid ProviderRequestDto providerEntity) {
 
         try {
             if(id == null || providerEntity == null) {

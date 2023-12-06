@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProviderUpdateStatusRequestDto {
-    private Long providerId;
+    private String providerId;
     private String newStatus;
 
     @NotEmpty (message = "Campo obligatorio.")

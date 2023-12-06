@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import semillero.ecosistema.entity.CountryEntity;
 
 @Repository
-public interface CountryRepository extends JpaRepository<CountryEntity,Long> {
-    CountryEntity findByName(String nanme);
+public interface CountryRepository extends JpaRepository<CountryEntity,String> {
+    CountryEntity findByName(String name);
 }
