@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "proveedores")
@@ -14,8 +15,9 @@ import lombok.NoArgsConstructor;
 public class ProviderEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid",strategy = "uuid2")
+    private String id;
 
     private String name;
     private String description;
@@ -27,7 +29,6 @@ public class ProviderEntity {
 
     private String image; // falta para que guarde 3 imagenes
 
-    private Boolean active;
     private Boolean deleted;
     private String feedBack;
 

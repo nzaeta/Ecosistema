@@ -15,7 +15,6 @@ import semillero.ecosistema.repository.*;
 import semillero.ecosistema.service.contracts.ProviderService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -70,8 +69,8 @@ public class ProviderServiceImpl implements ProviderService {
             providerEntityList.stream().filter(providerEntity -> providerEntity.getId() == providerResponseDto.getId())
                     .forEach(provider -> {
                         String categoryName = provider.getCategory().getNombre();
-                        String countryName = provider.getCountry().getNombre();
-                        String provinceName = provider.getProvince().getNombre();
+                        String countryName = provider.getCountry().getName();
+                        String provinceName = provider.getProvince().getName();
 
                         providerResponseDto.setCategoryName(categoryName);
                         providerResponseDto.setCountryName(countryName);
@@ -82,7 +81,7 @@ public class ProviderServiceImpl implements ProviderService {
 
 
     @Override
-    public ProviderEntity save(Long userId, ProviderRequestDto providerRequestDto) {
+    public ProviderEntity save(String userId, ProviderRequestDto providerRequestDto) {
         UserEntity userEntity = getUsersById(userId);
         validateMaxProviders(userEntity);
 
@@ -107,7 +106,7 @@ public class ProviderServiceImpl implements ProviderService {
      * @param userId Id de usuario a buscar
      * @return UserEntity encontrado
      */
-    private UserEntity getUsersById(Long userId) {
+    private UserEntity getUsersById(String userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotExistException());
     }
@@ -127,7 +126,6 @@ public class ProviderServiceImpl implements ProviderService {
     private void parametersInitialProvider(ProviderEntity providerEntity, UserEntity userEntity) {
         providerEntity.setStatus(STATUS_INITIAL);
         providerEntity.setIsNew(true);
-        providerEntity.setActive(true);
         providerEntity.setDeleted(false);
         providerEntity.setOpenFullImage(false);
         providerEntity.setUser(userEntity);
@@ -160,7 +158,7 @@ public class ProviderServiceImpl implements ProviderService {
     public ProviderEntity update(ProviderUpdateRequestDto providerUpdateRequestDto) {
         UserEntity userEntity = getUsersById(providerUpdateRequestDto.getUsersId());
         CategoryEntity categoryEntity = getCategoryById(providerUpdateRequestDto.getCategoryId());
-        CountryEntity countryEntity = getCountryById(providerUpdateRequestDto.getId());
+        CountryEntity countryEntity = getCountryById(providerUpdateRequestDto.getCountryId());
         ProvinceEntity provinceEntity = getProvinceById(providerUpdateRequestDto.getProvinceId());
 
         ProviderEntity existProvider = getProviderById(providerUpdateRequestDto.getId());
@@ -173,7 +171,6 @@ public class ProviderServiceImpl implements ProviderService {
          *  ESTABLECE VALORES PREDETERMINADOS DE LA BASE DE DATOS SI EN EL ProviderUpdateRequestDto NO SE PASA ALGUN VALOR.
          *  CON EL PROPOSITO PARA QUE NO GUARDE NULL AL MOMENTO DE ACTUALIZAR UN PROVEEDOR
          */
-        providerUpdateRequestDto.setActive(defaultIfNull(providerUpdateRequestDto.getActive(), existProvider.getActive()));
         providerUpdateRequestDto.setIsNew(defaultIfNull(providerUpdateRequestDto.getIsNew(), existProvider.getIsNew()));
         providerUpdateRequestDto.setDeleted(defaultIfNull(providerUpdateRequestDto.getDeleted(), existProvider.getDeleted()));
         providerUpdateRequestDto.setOpenFullImage(defaultIfNull(providerUpdateRequestDto.getOpenFullImage(), existProvider.getOpenFullImage()));
@@ -201,20 +198,20 @@ public class ProviderServiceImpl implements ProviderService {
         return value != null ? value : defaultValue;
     }
 
-    private CategoryEntity getCategoryById(Long categoryId) {
+    private CategoryEntity getCategoryById(String categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotExistException());
     }
 
-    private CountryEntity getCountryById(Long countryId) {
+    private CountryEntity getCountryById(String countryId) {
         return countryRepository.findById(countryId).orElseThrow(() -> new CountryNotExistException());
     }
 
-    private ProvinceEntity getProvinceById(Long provinceId) {
+    private ProvinceEntity getProvinceById(String provinceId) {
         return provinceRepository.findById(provinceId).orElseThrow(() -> new ProvinceNotExistException());
     }
 
-    private ProviderEntity getProviderById(Long providerId) {
+    private ProviderEntity getProviderById(String providerId) {
         return providerRepository.findById(providerId).orElse(null);
     }
 

@@ -36,6 +36,7 @@ public class SecurityConfig {
                                 .requestMatchers("/provider/get-name").permitAll()
                                 .requestMatchers("/provider/get-category").permitAll()
                                 .requestMatchers("/category/all").permitAll()
+                                .requestMatchers("/Publications/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManager->

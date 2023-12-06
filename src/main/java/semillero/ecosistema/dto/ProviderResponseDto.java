@@ -1,13 +1,11 @@
 package semillero.ecosistema.Dto;
 
-import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.URL;
 
 @Getter @Setter
 public class ProviderResponseDto {
-    private Long id;
+    private String id;
 
     private String categoryName;
 
@@ -35,7 +33,6 @@ public class ProviderResponseDto {
 
     private Boolean isNew;
 
-    private Boolean active;
 
     private Boolean deleted;
 

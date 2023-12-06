@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean disabledUserById(Long id) {
+    public Boolean disabledUserById(String id) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
         if(userEntity.isEmpty()) {
             return false;

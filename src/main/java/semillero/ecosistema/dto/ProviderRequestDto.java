@@ -8,17 +8,17 @@ import org.hibernate.validator.constraints.URL;
 @Getter @Setter
 public class ProviderRequestDto {
 
-    private Long id;
-    private Long categoryId;
-    private Long countryId; // pais ID
-    private Long provinceId; // provincia/estado ID
+    private String id;
+    private String categoryId;
+    private String countryId; // pais ID
+    private String provinceId; // provincia/estado ID
 
     @NotEmpty (message = "Campo obligatorio.")
     @Size(min = 2, max = 30, message = "Debe contener entre 2 y 30 caracteres.")
     private String name;
 
     @NotEmpty (message = "Campo obligatorio.")
-    @Size(min = 20, max = 50, message = "Debe contener entre 20 y 50 caracteres.")
+    @Size(min = 15, max = 100, message = "Debe contener entre 15 y 100 caracteres.")
     private String description;
 
     @NotNull(message = "Campo obligatorio.")
@@ -49,7 +49,6 @@ public class ProviderRequestDto {
 
     private String image; // falta para que guarde 3 imagenes
     private Boolean isNew;
-    private Boolean active;
     private Boolean deleted;
     private String status;
     private Boolean openFullImage;

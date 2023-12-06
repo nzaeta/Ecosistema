@@ -96,7 +96,7 @@ public class UserController {
 
     @Secured("ADMIN")
     @PatchMapping("disable-id")
-    public ResponseEntity<Boolean> disabledUserById(@RequestParam Long userId) {
+    public ResponseEntity<Boolean> disabledUserById(@RequestParam String userId) {
         return new ResponseEntity<Boolean>(userService.disabledUserById(userId) ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 

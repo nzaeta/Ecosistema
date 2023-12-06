@@ -16,7 +16,7 @@ public interface UserService {
 
     UserEntity update(String email, UserEntity userEntity);
 
-    Boolean disabledUserById(Long id);
+    Boolean disabledUserById(String id);
 
     Boolean disabledUserByEmail(String email);
 }

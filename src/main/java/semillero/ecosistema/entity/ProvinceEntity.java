@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "provincias")
@@ -12,10 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProvinceEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String nombre;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid",strategy = "uuid2")
+    private String id;
+    @Column(name = "nombre")
+    private String name;
     @ManyToOne
     @JoinColumn(name = "pais_id")
-    private CountryEntity pais;
+    private CountryEntity country;
 }

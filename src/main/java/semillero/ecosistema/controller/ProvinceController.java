@@ -20,67 +20,27 @@ public class ProvinceController {
     private final ProvinceService provinceService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<ProvinceEntity>> getAll(){
-        List<ProvinceEntity> provinceEntityList = provinceService.getAll();
-        try {
-            if (provinceEntityList.isEmpty()){
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-            return ResponseEntity.ok(provinceEntityList);
-        }catch (ResponseStatusException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    ResponseEntity<?> getAll(){
+        return provinceService.getAll();
     }
 
     @GetMapping("/get-name")
-    public ResponseEntity<ProvinceEntity> getByName(@RequestParam String name){
-        ProvinceEntity provinceEntity = provinceService.getByNombre(name);
-        try {
-            if(provinceEntity == null){
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-            return ResponseEntity.ok(provinceEntity);
-        }catch (ResponseStatusException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    ResponseEntity<?> getByName(@RequestParam String name){
+        return provinceService.getByName(name);
     }
 
-    @GetMapping("/by-pais")
-    private ResponseEntity<List<ProvinceEntity>> getByPais(@RequestParam Long pais_id){
-        List<ProvinceEntity> provinceEntityList = provinceService.getByPais(pais_id);
-        try {
-            if (provinceEntityList.isEmpty()){
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-            return ResponseEntity.ok(provinceEntityList);
-        } catch (ResponseStatusException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    @GetMapping("/by-country")
+    ResponseEntity<?> getByCountryId(@RequestParam String country_id){
+        return provinceService.getByCountryId(country_id);
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody ProvinceEntity provinceEntity){
-        try {
-            return new ResponseEntity<>(provinceService.save(provinceEntity),HttpStatus.CREATED);
-        }catch (ProvinceExistException provinceExistException){
-            String errorMessage = "La provincia ya existe";
-            ErrorResponse errorResponse = new ErrorResponse(errorMessage);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-        }catch (ResponseStatusException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    ResponseEntity<?> save(@RequestBody ProvinceEntity provinceEntity){
+        return provinceService.save(provinceEntity);
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<?> update(@RequestParam String nameProvince, @RequestBody ProvinceEntity provinceEntity){
-        try {
-            return  new ResponseEntity<>(provinceService.update(nameProvince,provinceEntity),HttpStatus.OK);
-        }catch (ProvinceNotExistException provinceNotExistException){
-            String errorMessage = "La provincia no existe";
-            ErrorResponse errorResponse = new ErrorResponse(errorMessage);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-        }catch (ResponseStatusException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    ResponseEntity<?> update(@RequestBody ProvinceEntity provinceEntity){
+        return provinceService.update(provinceEntity);
     }
 }
