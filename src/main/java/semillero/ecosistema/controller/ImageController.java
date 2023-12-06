@@ -1,6 +1,6 @@
 package semillero.ecosistema.controller;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.mapping.Map;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.List;
 import semillero.ecosistema.Dto.MsjImagenDto;
 @RequestMapping("/imagen")
-@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 public class ImageController {
@@ -54,7 +53,7 @@ public class ImageController {
         if(!imagenService.exists(id))
             return new ResponseEntity(new MsjImagenDto("Imagen inexistente."), HttpStatus.NOT_FOUND);
         ImageEntity imagen = imagenService.getImagen(id).get();
-        Map result = (Map) cloudinaryService.delete(imagen.getImagenId());
+        Map result = cloudinaryService.delete(imagen.getImagenId());
         imagenService.delete(id);
         return new ResponseEntity(new MsjImagenDto("Imagen eliminada"), HttpStatus.OK);
 
