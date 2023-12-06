@@ -44,12 +44,11 @@ public class ProviderRequestDto {
     private String city;
 
     @NotEmpty (message = "Campo obligatorio.")
-    @Size(min = 20, max = 300, message = "Debe contener entre 20 y 300 caracteres.")
+    @Size(min = 15, max = 300, message = "Debe contener entre 15 y 300 caracteres.")
     private String about; // descripcion larga del producto
 
     private String image; // falta para que guarde 3 imagenes
     private Boolean isNew;
-    private Boolean active;
     private Boolean deleted;
     private String status;
     private Boolean openFullImage;

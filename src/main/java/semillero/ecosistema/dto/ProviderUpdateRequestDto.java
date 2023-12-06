@@ -50,7 +50,6 @@ public class ProviderUpdateRequestDto {
 
     private String image; // falta para que guarde 3 imagenes
     private Boolean isNew;
-    private Boolean active;
     private Boolean deleted;
     private String status;
     private Boolean openFullImage;

@@ -33,7 +33,6 @@ public class ProviderResponseDto {
 
     private Boolean isNew;
 
-    private Boolean active;
 
     private Boolean deleted;
 
