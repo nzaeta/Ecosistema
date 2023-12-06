@@ -22,7 +22,7 @@ public interface ProviderRepository extends JpaRepository<ProviderEntity, String
     @Query("SELECT a FROM ProviderEntity a WHERE a.deleted = false and a.category.nombre = :categoria")
     public List<ProviderEntity> listarPorCategoria(@Param("categoria") String categoria);
 
-    @Query(value = "SELECT * FROM proveedores p WHERE p.status = :REVISION_INICIAL OR p.status = :CAMBIOS_REALIZADOS", nativeQuery = true)
+    @Query(value = "SELECT * FROM proveedores p WHERE (p.status = :REVISION_INICIAL OR p.status = :CAMBIOS_REALIZADOS) and p.deleted = false", nativeQuery = true)
     List<ProviderEntity> findAllByStatus(String REVISION_INICIAL, String CAMBIOS_REALIZADOS);
 
 }

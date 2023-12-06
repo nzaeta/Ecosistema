@@ -158,7 +158,7 @@ public class ProviderServiceImpl implements ProviderService {
     public ProviderEntity update(ProviderUpdateRequestDto providerUpdateRequestDto) {
         UserEntity userEntity = getUsersById(providerUpdateRequestDto.getUsersId());
         CategoryEntity categoryEntity = getCategoryById(providerUpdateRequestDto.getCategoryId());
-        CountryEntity countryEntity = getCountryById(providerUpdateRequestDto.getId());
+        CountryEntity countryEntity = getCountryById(providerUpdateRequestDto.getCountryId());
         ProvinceEntity provinceEntity = getProvinceById(providerUpdateRequestDto.getProvinceId());
 
         ProviderEntity existProvider = getProviderById(providerUpdateRequestDto.getId());

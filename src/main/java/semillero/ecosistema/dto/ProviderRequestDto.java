@@ -18,7 +18,7 @@ public class ProviderRequestDto {
     private String name;
 
     @NotEmpty (message = "Campo obligatorio.")
-    @Size(min = 20, max = 100, message = "Debe contener entre 20 y 100 caracteres.")
+    @Size(min = 15, max = 100, message = "Debe contener entre 15 y 100 caracteres.")
     private String description;
 
     @NotNull(message = "Campo obligatorio.")
@@ -44,7 +44,7 @@ public class ProviderRequestDto {
     private String city;
 
     @NotEmpty (message = "Campo obligatorio.")
-    @Size(min = 15, max = 300, message = "Debe contener entre 15 y 300 caracteres.")
+    @Size(min = 20, max = 300, message = "Debe contener entre 20 y 300 caracteres.")
     private String about; // descripcion larga del producto
 
     private String image; // falta para que guarde 3 imagenes
