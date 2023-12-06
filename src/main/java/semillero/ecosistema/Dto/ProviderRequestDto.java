@@ -18,7 +18,7 @@ public class ProviderRequestDto {
     private String name;
 
     @NotEmpty (message = "Campo obligatorio.")
-    @Size(min = 20, max = 100, message = "Debe contener entre 20 y 100 caracteres.")
+    @Size(min = 20, max = 50, message = "Debe contener entre 20 y 50 caracteres.")
     private String description;
 
     @NotNull(message = "Campo obligatorio.")

@@ -11,7 +11,6 @@ import semillero.ecosistema.Dto.ProviderRequestDto;
 import semillero.ecosistema.Dto.ProviderResponseDto;
 import semillero.ecosistema.Dto.ProviderUpdateRequestDto;
 import semillero.ecosistema.Dto.ProviderUpdateStatusRequestDto;
-import semillero.ecosistema.entity.ProviderEntity;
 import semillero.ecosistema.exception.*;
 import semillero.ecosistema.service.contracts.ProviderService;
 
@@ -88,7 +87,7 @@ public class ProviderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
-    //@Secured("USER")
+    @Secured("USER")
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestParam Long id, @RequestBody @Valid ProviderRequestDto providerEntity) {
 
@@ -145,7 +144,7 @@ public class ProviderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
-
+    @Secured("USER")
     @PutMapping("/update")
     public ResponseEntity<?> update(@RequestBody @Valid ProviderUpdateRequestDto providerUpdateRequestDto) {
 
