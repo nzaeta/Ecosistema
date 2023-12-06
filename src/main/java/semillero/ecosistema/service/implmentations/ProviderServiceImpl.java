@@ -126,7 +126,6 @@ public class ProviderServiceImpl implements ProviderService {
     private void parametersInitialProvider(ProviderEntity providerEntity, UserEntity userEntity) {
         providerEntity.setStatus(STATUS_INITIAL);
         providerEntity.setIsNew(true);
-        providerEntity.setActive(true);
         providerEntity.setDeleted(false);
         providerEntity.setOpenFullImage(false);
         providerEntity.setUser(userEntity);
@@ -172,7 +171,6 @@ public class ProviderServiceImpl implements ProviderService {
          *  ESTABLECE VALORES PREDETERMINADOS DE LA BASE DE DATOS SI EN EL ProviderUpdateRequestDto NO SE PASA ALGUN VALOR.
          *  CON EL PROPOSITO PARA QUE NO GUARDE NULL AL MOMENTO DE ACTUALIZAR UN PROVEEDOR
          */
-        providerUpdateRequestDto.setActive(defaultIfNull(providerUpdateRequestDto.getActive(), existProvider.getActive()));
         providerUpdateRequestDto.setIsNew(defaultIfNull(providerUpdateRequestDto.getIsNew(), existProvider.getIsNew()));
         providerUpdateRequestDto.setDeleted(defaultIfNull(providerUpdateRequestDto.getDeleted(), existProvider.getDeleted()));
         providerUpdateRequestDto.setOpenFullImage(defaultIfNull(providerUpdateRequestDto.getOpenFullImage(), existProvider.getOpenFullImage()));

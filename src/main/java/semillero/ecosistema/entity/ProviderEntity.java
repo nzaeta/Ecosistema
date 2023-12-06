@@ -27,7 +27,6 @@ public class ProviderEntity {
 
     private String image; // falta para que guarde 3 imagenes
 
-    private Boolean active;
     private Boolean deleted;
     private String feedBack;
 

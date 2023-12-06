@@ -13,13 +13,13 @@ public interface ProviderRepository extends JpaRepository<ProviderEntity, Long> 
     List<ProviderEntity> findByName(String name);
     List<ProviderEntity> findByStatus(String status);
 
-    @Query("SELECT a FROM ProviderEntity a WHERE a.name LIKE %:nombre% and a.deleted = false and a.active = true")
+    @Query("SELECT a FROM ProviderEntity a WHERE a.name LIKE %:nombre% and a.deleted = false")
     public List<ProviderEntity> searchProviderByName(@Param("nombre") String nombre);
 
-    @Query("SELECT a FROM ProviderEntity a WHERE a.deleted = false and a.active = true and status = 'ACEPTADO'")
+    @Query("SELECT a FROM ProviderEntity a WHERE a.deleted = false and status = 'ACEPTADO'")
     public List<ProviderEntity> listarAceptados();
 
-    @Query("SELECT a FROM ProviderEntity a WHERE a.deleted = false and a.active = true and a.category.nombre = :categoria")
+    @Query("SELECT a FROM ProviderEntity a WHERE a.deleted = false and a.category.nombre = :categoria")
     public List<ProviderEntity> listarPorCategoria(@Param("categoria") String categoria);
 
     @Query(value = "SELECT * FROM proveedores p WHERE p.status = :REVISION_INICIAL OR p.status = :CAMBIOS_REALIZADOS", nativeQuery = true)
