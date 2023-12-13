@@ -16,6 +16,7 @@ public interface PublicationService {
     ResponseEntity<?> save(PublicationRequestDto publicationRequestDto);
     ResponseEntity<?> update(PublicationRequestDto publicationRequestDto);
     ResponseEntity<?> delete(String id);
+    ResponseEntity<?> active(String id);
     void incrementViewCount(String id);
 
 }

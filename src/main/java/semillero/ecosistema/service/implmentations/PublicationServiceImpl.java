@@ -46,7 +46,7 @@ public class PublicationServiceImpl  implements PublicationService {
             return ResponseEntity.ok(publicationsDto);
         } catch (Exception e){
 
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }
 
@@ -64,7 +64,7 @@ public class PublicationServiceImpl  implements PublicationService {
                         .body("The publication does not exist with this title: " + title);
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Internal Error");
+                    .body(e);
         }
     }
 
@@ -80,7 +80,7 @@ public class PublicationServiceImpl  implements PublicationService {
                     .body("The publication does not exist with this ID: " + id);
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Internal Error");
+                    .body(e);
         }
 
     }
@@ -99,7 +99,7 @@ public class PublicationServiceImpl  implements PublicationService {
             return ResponseEntity.ok(publicationsDto);
         }catch (Exception e){
 
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }
 
@@ -115,7 +115,7 @@ public class PublicationServiceImpl  implements PublicationService {
             }
             return ResponseEntity.ok(publicationsDto);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
 
     }
@@ -141,7 +141,7 @@ public class PublicationServiceImpl  implements PublicationService {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
                     .body("User ID not found");
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }
 
@@ -162,7 +162,7 @@ public class PublicationServiceImpl  implements PublicationService {
 
             return ResponseEntity.ok().body("UPDATED");
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
 
 
@@ -180,7 +180,22 @@ public class PublicationServiceImpl  implements PublicationService {
         }catch (PublicationNotExistException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Publication Not Found");
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> active(String id){
+        try {
+            PublicationEntity publication = publicationRepository.findById(id)
+                    .orElseThrow(PublicationNotExistException::new);
+            publication.setHidden(false);
+            publicationRepository.save(publication);
+            return ResponseEntity.status(HttpStatus.OK).body("ACTIVED");
+        }catch (PublicationNotExistException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }
 }

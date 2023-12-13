@@ -68,4 +68,10 @@ public class PublicationController {
         return publicationService.delete(id);
     }
 
+    @Secured("ADMIN")
+    @PatchMapping("/active")
+    ResponseEntity<?> active(@RequestParam String id){
+        return publicationService.active(id);
+    }
+
 }
