@@ -7,14 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import semillero.ecosistema.Dto.ProviderRequestDto;
-import semillero.ecosistema.Dto.ProviderResponseDto;
-import semillero.ecosistema.Dto.ProviderUpdateRequestDto;
-import semillero.ecosistema.Dto.ProviderUpdateStatusRequestDto;
+import semillero.ecosistema.Dto.*;
 import semillero.ecosistema.exception.*;
 import semillero.ecosistema.service.contracts.ProviderService;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/provider")
@@ -23,15 +23,37 @@ public class ProviderController {
 
     private final ProviderService providerService;
 
-
+    @Secured("ADMIN")
     @GetMapping("/all")
-    public ResponseEntity<List<ProviderResponseDto>> getAll() {
+    public ResponseEntity<?> getAll() {
         List<ProviderResponseDto> providerResponseDtoList = providerService.getAll();
         try {
             if(providerResponseDtoList.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }
-            return ResponseEntity.ok(providerResponseDtoList);
+            Map<String, Object> response = new HashMap<>();
+            List<ProviderResponseDto> nuevos = new ArrayList();
+            List<ProviderResponseDto> aceptados = new ArrayList();
+            List<ProviderResponseDto> revision = new ArrayList();
+            List<ProviderResponseDto> denegados = new ArrayList();
+
+            for (ProviderResponseDto prov : providerResponseDtoList) {
+                if (prov.getStatus().equalsIgnoreCase("REVISION_INICIAL")) {
+                    nuevos.add(prov);
+                } else if (prov.getStatus().equalsIgnoreCase("ACEPTADO")) {
+                    aceptados.add(prov);
+                } else if (prov.getStatus().equalsIgnoreCase("DENEGADO")){
+                    denegados.add(prov);
+                } else {
+                    revision.add(prov);
+                }
+            }
+            response.put("nuevos", nuevos);
+            response.put("aceptados", aceptados);
+            response.put("revision", revision);
+            response.put("denegados", denegados);
+
+            return ResponseEntity.ok(response);
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -87,6 +109,23 @@ public class ProviderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    @GetMapping("/get-location")
+    public ResponseEntity<?> getByLocation(@RequestParam double latitude, @RequestParam double longitude) {
+
+        try {
+            List<ProviderResponseDto> providerResponseDtoList = providerService.getByLocation(latitude, longitude);
+
+            if(providerResponseDtoList.size() == 0) {
+                return ResponseEntity.status(HttpStatus.OK).body(messageErrorResponse("No hay proveedores en tu ciudad"));
+            }
+
+            return ResponseEntity.ok(providerResponseDtoList);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
     @Secured("USER")
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestParam String id, @RequestBody @Valid ProviderRequestDto providerEntity) {

@@ -24,4 +24,5 @@ public interface ProviderService {
     Boolean updateStatus(ProviderUpdateStatusRequestDto providerUpdateStatusRequestDto);
     ProviderEntity update(ProviderUpdateRequestDto providerUpdateRequestDto);
 
+    List<ProviderResponseDto> getByLocation(double latitude, double longitude);
 }
