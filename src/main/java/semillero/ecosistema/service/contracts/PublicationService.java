@@ -1,6 +1,7 @@
 package semillero.ecosistema.service.contracts;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 import semillero.ecosistema.Dto.PublicationRequestDto;
 import semillero.ecosistema.Dto.PublicationResponseDto;
 import semillero.ecosistema.entity.PublicationEntity;
@@ -18,5 +19,6 @@ public interface PublicationService {
     ResponseEntity<?> delete(String id);
     ResponseEntity<?> active(String id);
     void incrementViewCount(String id);
+    void agregarImagenAPublicacion(String id, MultipartFile imagen);
 
 }

@@ -2,6 +2,8 @@ package semillero.ecosistema.Dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
+import semillero.ecosistema.entity.ImageEntity;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +18,6 @@ public class PublicationRequestDto {
     private String content;
     private boolean hidden;
     private Date date;
-    private List<String> images;
+    private List<MultipartFile> images;
     private int visualizations;
 }
