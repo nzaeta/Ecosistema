@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import semillero.ecosistema.Dto.PublicationRequestDto;
 import semillero.ecosistema.Dto.PublicationResponseDto;
 import semillero.ecosistema.entity.PublicationEntity;
+import semillero.ecosistema.service.MailService;
 import semillero.ecosistema.service.contracts.PublicationService;
 
 import java.util.List;
@@ -72,6 +73,11 @@ public class PublicationController {
     @PatchMapping("/active")
     ResponseEntity<?> active(@RequestParam String id){
         return publicationService.active(id);
+    }
+
+    @GetMapping("/mail")
+    void sendEmail(){
+
     }
 
 }
