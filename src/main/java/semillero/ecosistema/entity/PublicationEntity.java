@@ -30,7 +30,7 @@ public class PublicationEntity {
     @Column(name="fecha_creacion")
     private Date date;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "imagen_id")
+    @JoinColumn(name = "publicacionId")
     private List<ImageEntity> imagenes;
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -34,6 +34,7 @@ public interface PublicationMapper {
     default void setUserName(PublicationEntity publicationEntity, @MappingTarget PublicationResponseDto publicationResponseDto){
         if(publicationEntity.getUsuarioCreador() != null){
             publicationResponseDto.setUserName(publicationEntity.getUsuarioCreador().getNombre());
+            publicationResponseDto.setImages(publicationEntity.getImagenes());
         }
     }
 

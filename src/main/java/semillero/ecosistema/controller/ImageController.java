@@ -41,7 +41,7 @@ public class ImageController {
         ImageEntity imagen = new ImageEntity();
         imagen.setName((String) result.get("original_filename"));
         imagen.setImagenUrl((String) result.get("url"));
-        imagen.setImagenId((String) result.get("public_id"));
+        imagen.setCloudinaryId((String) result.get("public_id"));
 
 
         imagenService.save(imagen);
@@ -53,7 +53,7 @@ public class ImageController {
         if(!imagenService.exists(id))
             return new ResponseEntity(new MsjImagenDto("Imagen inexistente."), HttpStatus.NOT_FOUND);
         ImageEntity imagen = imagenService.getImagen(id).get();
-        Map result = cloudinaryService.delete(imagen.getImagenId());
+        Map result = cloudinaryService.delete(imagen.getCloudinaryId());
         imagenService.delete(id);
         return new ResponseEntity(new MsjImagenDto("Imagen eliminada"), HttpStatus.OK);
 

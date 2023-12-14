@@ -6,6 +6,7 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import semillero.ecosistema.Dto.PublicationRequestDto;
@@ -41,9 +42,7 @@ public class PublicationServiceImpl  implements PublicationService {
     private final PublicationRepository publicationRepository;
     private final PublicationMapper publicationMapper;
     private final UserRepository userRepository;
-    private final ImageRepository imageRepository;
     private final CloudinaryService cloudinaryService;
-    private final ImageEntity imagen;
     private final ImageService imageService;
     @Override
     public ResponseEntity<?> getAll() {
@@ -154,8 +153,8 @@ public class PublicationServiceImpl  implements PublicationService {
                     .orElseThrow(UserNotExistException::new);
             PublicationEntity publication = publicationMapper.toEntity(publicationRequestDto);
             publication.setUsuarioCreador(user);
-            List <ImageEntity> imagen =agregarImagenAPublicacion(publicationRequestDto);
-            publication.setImagenes(imagen);
+            List<ImageEntity> imagenes = agregarImagenAPublicacion(publicationRequestDto);
+            publication.setImagenes(imagenes);
             publicationRepository.save(publication);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }catch (UserNotExistException e){
@@ -167,6 +166,7 @@ public class PublicationServiceImpl  implements PublicationService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> update(PublicationRequestDto publicationRequestDto) {
         try {
             PublicationEntity publication = publicationRepository.findById(publicationRequestDto.getId())
@@ -177,19 +177,20 @@ public class PublicationServiceImpl  implements PublicationService {
             publication.setContent(publicationRequestDto.getContent());
             publication.setDate(publicationRequestDto.getDate());
             publication.setVisualizations(publicationRequestDto.getVisualizations());
-            List <ImageEntity> imagen =agregarImagenAPublicacion(publicationRequestDto);
-            publication.setImagenes(imagen);
+            List<ImageEntity> imagenes = agregarImagenAPublicacion(publicationRequestDto);
+            publication.getImagenes().clear();
+            publication.getImagenes().addAll(imagenes);
             publicationRepository.save(publication);
-
             return ResponseEntity.ok().body("UPDATED");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }
-         public List agregarImagenAPublicacion (PublicationRequestDto publicationRequestDto) throws IOException {
-             PublicationEntity publicacion = publicationRepository.findById(publicationRequestDto.getId())
-                     .orElseThrow(PublicationNotExistException::new);
-             validarLimiteDeImagenes(publicacion);
+         public List<ImageEntity> agregarImagenAPublicacion (PublicationRequestDto publicationRequestDto) throws IOException {
+
+//             PublicationEntity publicacion = publicationRepository.findById(publicationRequestDto.getId())
+//                     .orElseThrow(PublicationNotExistException::new);
+//             validarLimiteDeImagenes(publicacion);
             List<ImageEntity> listaImagen = new ArrayList<>();
               try {
                  for (MultipartFile imagen: publicationRequestDto.getImages()) {
@@ -202,9 +203,9 @@ public class PublicationServiceImpl  implements PublicationService {
 
                      image.setName((String) subirImagen.get("original_filename"));
                      image.setImagenUrl((String) subirImagen.get("url"));
-                     image.setImagenId((String) subirImagen.get("public_id"));
-                     ImageEntity im = imageService.save(image);
-                     listaImagen.add(im);
+                     image.setCloudinaryId((String) subirImagen.get("public_id"));
+//                     ImageEntity im = imageService.save(image);
+                     listaImagen.add(image);
                  }
                return listaImagen;
              } catch (IOException e) {

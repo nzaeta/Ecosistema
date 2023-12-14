@@ -52,13 +52,13 @@ public class PublicationController {
 
     @Secured("ADMIN")
     @PostMapping("/save")
-    ResponseEntity<?> save(@RequestBody PublicationRequestDto publicationRequestDto){
+    ResponseEntity<?> save(@ModelAttribute PublicationRequestDto publicationRequestDto){
         return publicationService.save(publicationRequestDto);
     }
 
     @Secured("ADMIN")
-    @PatchMapping("/update")
-    ResponseEntity<?> update(@RequestBody PublicationRequestDto publicationRequestDto){
+    @PutMapping("/update")
+    ResponseEntity<?> update(@ModelAttribute PublicationRequestDto publicationRequestDto){
         return publicationService.update(publicationRequestDto);
     }
 
