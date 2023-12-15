@@ -19,6 +19,6 @@ public interface PublicationService {
     ResponseEntity<?> delete(String id);
     ResponseEntity<?> active(String id);
     void incrementViewCount(String id);
-    void agregarImagenAPublicacion(String id, MultipartFile imagen);
+
 
 }

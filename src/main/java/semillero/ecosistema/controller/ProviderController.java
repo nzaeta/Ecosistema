@@ -14,6 +14,7 @@ import semillero.ecosistema.Dto.ProviderUpdateStatusRequestDto;
 import semillero.ecosistema.exception.*;
 import semillero.ecosistema.service.contracts.ProviderService;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -89,7 +90,7 @@ public class ProviderController {
     }
     @Secured("USER")
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestParam String id, @RequestBody @Valid ProviderRequestDto providerEntity) {
+    public ResponseEntity<?> save(@RequestParam String id, @ModelAttribute @Valid ProviderRequestDto providerEntity) {
 
         try {
             if(id == null || providerEntity == null) {
@@ -104,7 +105,7 @@ public class ProviderController {
         } catch (ProviderMaxCreatedException providerMaxCreatedException) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageErrorResponse("Has superado el límite de 3 proveedores creados por usuario"));
 
-        } catch (ResponseStatusException e) {
+        } catch (ResponseStatusException | IOException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
@@ -146,7 +147,7 @@ public class ProviderController {
     }
     @Secured("USER")
     @PutMapping("/update")
-    public ResponseEntity<?> update(@RequestBody @Valid ProviderUpdateRequestDto providerUpdateRequestDto) {
+    public ResponseEntity<?> update(@ModelAttribute @Valid ProviderUpdateRequestDto providerUpdateRequestDto) {
 
         try {
             if(providerUpdateRequestDto == null) {
@@ -159,6 +160,8 @@ public class ProviderController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageErrorResponse("El proveedor no existe"));
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

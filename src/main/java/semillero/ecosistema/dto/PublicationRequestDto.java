@@ -1,5 +1,6 @@
 package semillero.ecosistema.Dto;
 
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,6 +22,7 @@ public class PublicationRequestDto {
     private boolean hidden;
     @DateTimeFormat(pattern= "yyyy-MM-dd")
     private Date date;
+    @Size(min=1, max=3, message = "La publicación debe contener entre 1 y 3 imágenes.")
     private List<MultipartFile> images;
     private int visualizations;
 }

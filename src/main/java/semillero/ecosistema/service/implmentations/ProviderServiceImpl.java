@@ -3,18 +3,20 @@ package semillero.ecosistema.service.implmentations;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
-import semillero.ecosistema.Dto.ProviderRequestDto;
-import semillero.ecosistema.Dto.ProviderResponseDto;
-import semillero.ecosistema.Dto.ProviderUpdateRequestDto;
-import semillero.ecosistema.Dto.ProviderUpdateStatusRequestDto;
+import org.springframework.web.multipart.MultipartFile;
+import semillero.ecosistema.Dto.*;
 import semillero.ecosistema.entity.*;
 import semillero.ecosistema.enums.ProviderEnum;
 import semillero.ecosistema.exception.*;
 import semillero.ecosistema.mapper.ProviderMapper;
 import semillero.ecosistema.repository.*;
+import semillero.ecosistema.service.CloudinaryService;
 import semillero.ecosistema.service.contracts.ProviderService;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +28,7 @@ public class ProviderServiceImpl implements ProviderService {
     private final ProviderMapper providerMapper;
     private final CountryRepository countryRepository;
     private final ProvinceRepository provinceRepository;
+    private final CloudinaryService cloudinaryService;
 
     private static final String STATUS_INITIAL = ProviderEnum.REVISION_INICIAL.name();
     private static final String CAMBIOS_REALIZADOS = ProviderEnum.CAMBIOS_REALIZADOS.name();
@@ -81,7 +84,7 @@ public class ProviderServiceImpl implements ProviderService {
 
 
     @Override
-    public ProviderEntity save(String userId, ProviderRequestDto providerRequestDto) {
+    public ProviderEntity save(String userId, ProviderRequestDto providerRequestDto) throws IOException {
         UserEntity userEntity = getUsersById(userId);
         validateMaxProviders(userEntity);
 
@@ -96,16 +99,36 @@ public class ProviderServiceImpl implements ProviderService {
         providerEntity.setProvince(provincia);
         providerEntity.setCountry(pais);
         providerEntity.setCategory(categoria);
+        List<ImageEntity> images = agregarImagenAProveedor(providerRequestDto.getImages());
+        providerEntity.setImagenes (images);
 
         ProviderEntity providerSaved = providerRepository.save(providerEntity);
         return providerSaved;
     }
 
-    /**
-     * Buscar usuario por su ID
-     * @param userId Id de usuario a buscar
-     * @return UserEntity encontrado
-     */
+    public List<ImageEntity> agregarImagenAProveedor (List <MultipartFile> imagenes) throws IOException {
+
+        List<ImageEntity> listaImagen = new ArrayList<>();
+        try {
+            for (MultipartFile imagen: imagenes) {
+
+                // Subir la imagen a Cloudinary
+                Map subirImagen = cloudinaryService.upload(imagen);
+
+                // Crear y guardar la entidad de Imagen
+                ImageEntity image = new ImageEntity();
+
+                image.setName((String) subirImagen.get("original_filename"));
+                image.setImagenUrl((String) subirImagen.get("url"));
+                image.setCloudinaryId((String) subirImagen.get("public_id"));
+//                     ImageEntity im = imageService.save(image);
+                listaImagen.add(image);
+            }
+            return listaImagen;
+        } catch (IOException e) {
+            throw new RuntimeException("Error al cargar la imagen.");
+        }
+    }
     private UserEntity getUsersById(String userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotExistException());
@@ -115,7 +138,7 @@ public class ProviderServiceImpl implements ProviderService {
      * Validar el maximo de proveedores al crear por usuario
      */
     private void validateMaxProviders(UserEntity userEntity) {
-        if(userEntity.getProviderEntityList().size() >= 3) {
+        if(userEntity.getProviderEntityList().size() > 3) {
             throw new ProviderMaxCreatedException();
         }
     }
@@ -124,8 +147,10 @@ public class ProviderServiceImpl implements ProviderService {
      * Establecer parametros iniciales de proveedor
      */
     private void parametersInitialProvider(ProviderEntity providerEntity, UserEntity userEntity) {
+
         providerEntity.setStatus(STATUS_INITIAL);
-        providerEntity.setIsNew(true);
+        providerEntity.setFeedBack("Proveedor en revisión");
+                providerEntity.setIsNew(true);
         providerEntity.setDeleted(false);
         providerEntity.setOpenFullImage(false);
         providerEntity.setUser(userEntity);
@@ -155,7 +180,7 @@ public class ProviderServiceImpl implements ProviderService {
     }
 
     @Override
-    public ProviderEntity update(ProviderUpdateRequestDto providerUpdateRequestDto) {
+    public ProviderEntity update(ProviderUpdateRequestDto providerUpdateRequestDto) throws IOException {
         UserEntity userEntity = getUsersById(providerUpdateRequestDto.getUsersId());
         CategoryEntity categoryEntity = getCategoryById(providerUpdateRequestDto.getCategoryId());
         CountryEntity countryEntity = getCountryById(providerUpdateRequestDto.getCountryId());
@@ -178,8 +203,11 @@ public class ProviderServiceImpl implements ProviderService {
 
         /************/
 
-        ProviderEntity providerEntity = providerMapper.toEntityUpdate(providerUpdateRequestDto);
 
+        ProviderEntity providerEntity = providerMapper.toEntityUpdate(providerUpdateRequestDto);
+        List<ImageEntity> images = agregarImagenAProveedor(providerUpdateRequestDto.getImages());
+        providerEntity.getImagenes().clear();
+        providerEntity.getImagenes().addAll(images);
         providerEntity.setUser(userEntity);
         providerEntity.setCategory(categoryEntity);
         providerEntity.setCountry(countryEntity);

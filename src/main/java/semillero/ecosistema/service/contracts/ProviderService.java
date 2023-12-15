@@ -6,6 +6,7 @@ import semillero.ecosistema.Dto.ProviderUpdateStatusRequestDto;
 import semillero.ecosistema.Dto.ProviderUpdateRequestDto;
 import semillero.ecosistema.entity.ProviderEntity;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface ProviderService {
@@ -18,10 +19,10 @@ public interface ProviderService {
 
     List<ProviderResponseDto> getAccepted();
 
-    ProviderEntity save(String userId, ProviderRequestDto providerRequestDto);
+    ProviderEntity save(String userId, ProviderRequestDto providerRequestDto) throws IOException;
 
     List<ProviderResponseDto> getByStatus();
     Boolean updateStatus(ProviderUpdateStatusRequestDto providerUpdateStatusRequestDto);
-    ProviderEntity update(ProviderUpdateRequestDto providerUpdateRequestDto);
+    ProviderEntity update(ProviderUpdateRequestDto providerUpdateRequestDto) throws IOException;
 
 }

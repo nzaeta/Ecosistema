@@ -2,6 +2,7 @@ package semillero.ecosistema.service.implmentations;
 
 import com.mysql.cj.log.Log;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -141,10 +142,6 @@ public class PublicationServiceImpl  implements PublicationService {
             publicationRepository.save(publication);
     }
 
-    @Override
-    public void agregarImagenAPublicacion(String id, MultipartFile imagen) {
-
-    }
 
     @Override
     public ResponseEntity<?> save(PublicationRequestDto publicationRequestDto){
@@ -213,42 +210,13 @@ public class PublicationServiceImpl  implements PublicationService {
              }
          }
 
-    private void validarLimiteDeImagenes(PublicationEntity publicacion) {
+    private void validarLimiteDeImagenes(@NotNull PublicationEntity publicacion) {
         if (publicacion.getImagenes().size() > 3 || publicacion.getImagenes().isEmpty()) {
             throw new ImagenesPorPublicacionException();
         }
     }
-   /* public void agregarImagenAPublicacion(Long publicacionId, MultipartFile imagen) {
-        Publicacion publicacion = publicacionRepository.findById(publicacionId)
-                .orElseThrow(() -> new ResourceNotFoundException("Publicación no encontrada con id: " + publicacionId));
 
-        validarLimiteDeImagenes(publicacion);
 
-        try {
-            // Subir la imagen a Cloudinary
-            Map uploadResult = cloudinaryService.uploadImagen(imagen);
-
-            // Crear y guardar la entidad de Imagen
-            Imagen nuevaImagen = new Imagen();
-            nuevaImagen.setUrl((String) uploadResult.get("url")); // Ajusta según la respuesta de Cloudinary
-            nuevaImagen.setPublicacion(publicacion);
-
-            publicacion.getImagenes().add(nuevaImagen);
-            publicacionRepository.save(publicacion);
-        } catch (IOException e) {
-            // Manejar excepciones relacionadas con la carga de la imagen
-            e.printStackTrace();
-            throw new RuntimeException("Error al cargar la imagen.");
-        }
-    }
-
-    private void validarLimiteDeImagenes(Publicacion publicacion) {
-        if (publicacion.getImagenes().size() >= 3) {
-            throw new MaximoImagenesAlcanzadoException("Una publicación no puede tener más de 3 imágenes.");
-        }
-    }
-}
-*/
     @Override
     public ResponseEntity<?> delete(String id){
         try {

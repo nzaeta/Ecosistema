@@ -4,6 +4,9 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -48,7 +51,10 @@ public class ProviderUpdateRequestDto {
     @Size(min = 20, max = 300, message = "Debe contener entre 20 y 300 caracteres.")
     private String about; // descripcion larga del producto
 
-    private String image; // falta para que guarde 3 imagenes
+    @NotEmpty (message = "Campo obligatorio.")
+    @Size(min=1, max=3, message = "El proveedor debe contener entre 1 y 3 imágenes.")
+    private List<MultipartFile> images;
+
     private Boolean isNew;
     private Boolean deleted;
     private String status;
@@ -56,4 +62,5 @@ public class ProviderUpdateRequestDto {
 
     private String feedBack;
     private String usersId;
+
 }
