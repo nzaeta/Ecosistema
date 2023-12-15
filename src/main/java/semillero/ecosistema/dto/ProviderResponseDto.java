@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import semillero.ecosistema.entity.ImageEntity;
 
+import java.util.List;
+
 @Getter @Setter
 public class ProviderResponseDto {
     private String id;
@@ -18,7 +20,7 @@ public class ProviderResponseDto {
     private String instagram;
     private String city;
     private String about; // descripcion larga del producto
-    private ImageEntity image;
+    private List<ImageEntity> images;
     private Boolean isNew;
     private Boolean deleted;
     private String status;

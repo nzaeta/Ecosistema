@@ -149,7 +149,7 @@ public class ProviderServiceImpl implements ProviderService {
         providerEntity.setCountry(pais);
         providerEntity.setCategory(categoria);
         List<ImageEntity> images = agregarImagenAProveedor(providerRequestDto.getImages());
-        providerEntity.setImagenes (images);
+        providerEntity.setImages (images);
 
         ProviderEntity providerSaved = providerRepository.save(providerEntity);
         return providerSaved;
@@ -264,9 +264,9 @@ public class ProviderServiceImpl implements ProviderService {
 
         ProviderEntity providerEntity = providerMapper.toEntityUpdate(providerUpdateRequestDto);
         List<ImageEntity> images = agregarImagenAProveedor(providerUpdateRequestDto.getImages());
-        existProvider.getImagenes().clear();
+        existProvider.getImages().clear();
 //        providerEntity.getImagenes().addAll(images);
-        providerEntity.setImagenes(images);
+        providerEntity.setImages(images);
 
         providerEntity.setUser(userEntity);
         providerEntity.setCategory(categoryEntity);

@@ -31,7 +31,7 @@ public class ProviderEntity {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "providerId")
-    private List<ImageEntity> imagenes;
+    private List<ImageEntity> images;
 
 
     private Boolean deleted;
