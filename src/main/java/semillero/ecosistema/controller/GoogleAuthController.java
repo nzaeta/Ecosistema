@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import semillero.ecosistema.Dto.AuthResponse;
+import semillero.ecosistema.dto.AuthResponse;
 import semillero.ecosistema.service.AuthService;
 
 import java.util.Map;

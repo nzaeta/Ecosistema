@@ -1,9 +1,9 @@
 package semillero.ecosistema.service.contracts;
 
-import semillero.ecosistema.Dto.ProviderRequestDto;
-import semillero.ecosistema.Dto.ProviderResponseDto;
-import semillero.ecosistema.Dto.ProviderUpdateStatusRequestDto;
-import semillero.ecosistema.Dto.ProviderUpdateRequestDto;
+import semillero.ecosistema.dto.ProviderRequestDto;
+import semillero.ecosistema.dto.ProviderResponseDto;
+import semillero.ecosistema.dto.ProviderUpdateStatusRequestDto;
+import semillero.ecosistema.dto.ProviderUpdateRequestDto;
 import semillero.ecosistema.entity.ProviderEntity;
 
 import java.io.IOException;
@@ -25,4 +25,5 @@ public interface ProviderService {
     Boolean updateStatus(ProviderUpdateStatusRequestDto providerUpdateStatusRequestDto);
     ProviderEntity update(ProviderUpdateRequestDto providerUpdateRequestDto) throws IOException;
 
+    List<ProviderResponseDto> getByLocation(double latitude, double longitude);
 }

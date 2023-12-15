@@ -1,9 +1,9 @@
 package semillero.ecosistema.mapper;
 
 import org.mapstruct.Mapper;
-import semillero.ecosistema.Dto.ProviderRequestDto;
-import semillero.ecosistema.Dto.ProviderResponseDto;
-import semillero.ecosistema.Dto.ProviderUpdateRequestDto;
+import semillero.ecosistema.dto.ProviderRequestDto;
+import semillero.ecosistema.dto.ProviderResponseDto;
+import semillero.ecosistema.dto.ProviderUpdateRequestDto;
 import semillero.ecosistema.entity.ProviderEntity;
 
 import java.util.List;

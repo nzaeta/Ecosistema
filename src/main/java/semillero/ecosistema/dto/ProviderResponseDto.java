@@ -1,4 +1,4 @@
-package semillero.ecosistema.Dto;
+package semillero.ecosistema.dto;
 
 import lombok.Getter;
 import lombok.Setter;

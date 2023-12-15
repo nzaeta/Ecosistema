@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import semillero.ecosistema.Dto.PublicationRequestDto;
-import semillero.ecosistema.Dto.PublicationResponseDto;
+import semillero.ecosistema.dto.PublicationRequestDto;
+import semillero.ecosistema.dto.PublicationResponseDto;
 import semillero.ecosistema.entity.ImageEntity;
 import semillero.ecosistema.entity.PublicationEntity;
 import semillero.ecosistema.entity.UserEntity;
@@ -48,7 +48,7 @@ public class PublicationServiceImpl  implements PublicationService {
     @Override
     public ResponseEntity<?> getAll() {
         try {
-            List<PublicationEntity> publications = publicationRepository.findAll();
+            List<PublicationEntity> publications = publicationRepository.findAllByOrderByDateDesc();
             List<PublicationResponseDto> publicationsDto = publications.stream()
                     .map(publicationMapper::toResponseDto)
                     .collect(Collectors.toList());
@@ -67,7 +67,7 @@ public class PublicationServiceImpl  implements PublicationService {
     @Override
     public ResponseEntity<?> getByTitle(String title){
         try {
-            PublicationEntity publication = publicationRepository.findByTitle(title);
+            PublicationEntity publication = publicationRepository.findByTitleOrderByDateDesc(title);
             if (publication == null) {
                 throw new PublicationNotExistException();
             }
@@ -102,7 +102,7 @@ public class PublicationServiceImpl  implements PublicationService {
     @Override
     public ResponseEntity<?> getByDeletedFalse(){
         try {
-            List<PublicationEntity> publications = publicationRepository.findByHiddenFalse();
+            List<PublicationEntity> publications = publicationRepository.findByHiddenFalseOrderByDateDesc();
             List<PublicationResponseDto> publicationsDto = publications.stream()
                     .map(publicationMapper::toResponseDto)
                     .collect(Collectors.toList());
@@ -120,7 +120,7 @@ public class PublicationServiceImpl  implements PublicationService {
     @Override
     public ResponseEntity<?> getByUsuarioId(String user_id){
         try {
-            List<PublicationEntity> publications = publicationRepository.findByUsuarioCreadorId(user_id);
+            List<PublicationEntity> publications = publicationRepository.findByUsuarioCreadorIdOrderByDateDesc(user_id);
             List<PublicationResponseDto> publicationsDto = publications.stream()
                     .map(publicationMapper::toResponseDto)
                     .collect(Collectors.toList());

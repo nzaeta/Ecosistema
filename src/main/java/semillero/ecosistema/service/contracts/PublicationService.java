@@ -2,8 +2,8 @@ package semillero.ecosistema.service.contracts;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
-import semillero.ecosistema.Dto.PublicationRequestDto;
-import semillero.ecosistema.Dto.PublicationResponseDto;
+import semillero.ecosistema.dto.PublicationRequestDto;
+import semillero.ecosistema.dto.PublicationResponseDto;
 import semillero.ecosistema.entity.PublicationEntity;
 
 import java.util.List;

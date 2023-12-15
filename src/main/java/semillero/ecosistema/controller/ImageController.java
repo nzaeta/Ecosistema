@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
-import semillero.ecosistema.Dto.MsjImagenDto;
+import semillero.ecosistema.dto.MsjImagenDto;
 @RequestMapping("/imagen")
 @RestController
 @RequiredArgsConstructor
