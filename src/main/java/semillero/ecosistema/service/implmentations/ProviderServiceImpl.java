@@ -258,6 +258,7 @@ public class ProviderServiceImpl implements ProviderService {
         providerUpdateRequestDto.setDeleted(defaultIfNull(providerUpdateRequestDto.getDeleted(), existProvider.getDeleted()));
         providerUpdateRequestDto.setOpenFullImage(defaultIfNull(providerUpdateRequestDto.getOpenFullImage(), existProvider.getOpenFullImage()));
         providerUpdateRequestDto.setStatus(ProviderEnum.CAMBIOS_REALIZADOS.name());
+        providerUpdateRequestDto.setFeedBack("Los cambios han sido realizados. El administrador realizará la revisión y devolución correspondiente");
 
         /************/
 
