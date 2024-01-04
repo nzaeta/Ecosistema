@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import semillero.ecosistema.dto.*;
@@ -208,4 +210,19 @@ public class ProviderController {
     private ErrorResponse messageErrorResponse(String message) {
         return new ErrorResponse(message);
     }
+
+    @Secured("USER")
+    @GetMapping("/get-user")
+    public ResponseEntity<List<ProviderResponseDto>> getByUser(@AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        List<ProviderResponseDto> providers = providerService.getByUser(username);
+        try {
+            if(providers.isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+            return ResponseEntity.status(HttpStatus.OK).body(providers);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
 }

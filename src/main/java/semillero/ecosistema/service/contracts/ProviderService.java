@@ -26,4 +26,6 @@ public interface ProviderService {
     ProviderEntity update(ProviderUpdateRequestDto providerUpdateRequestDto) throws IOException;
 
     List<ProviderResponseDto> getByLocation(double latitude, double longitude);
+
+    List<ProviderResponseDto> getByUser(String username);
 }

@@ -304,5 +304,13 @@ public class ProviderServiceImpl implements ProviderService {
         return providerRepository.findById(providerId).orElse(null);
     }
 
+    @Override
+    public List<ProviderResponseDto> getByUser(String username) {
+        List<ProviderEntity> providers = providerRepository.listarPorUsuario(username);
+        List<ProviderResponseDto> providerResponseDtoList = providerMapper.toDtoList(providers);
+        mapperParamsProvider(providers, providerResponseDtoList);
+        return providerResponseDtoList;
+    }
+
 
 }

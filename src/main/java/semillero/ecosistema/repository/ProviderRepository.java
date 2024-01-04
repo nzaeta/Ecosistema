@@ -28,5 +28,7 @@ public interface ProviderRepository extends JpaRepository<ProviderEntity, String
     @Query("SELECT p FROM ProviderEntity p WHERE (p.country.name = :pais and p.province.name = :provincia and p.city = :ciudad) and p.deleted = false")
     List<ProviderEntity> findByLocation(String pais, String provincia, String ciudad);
 
+    @Query("SELECT a FROM ProviderEntity a WHERE a.deleted = false and a.user.email = :usuario")
+    public List<ProviderEntity> listarPorUsuario(@Param("usuario") String usuario);
 
 }
