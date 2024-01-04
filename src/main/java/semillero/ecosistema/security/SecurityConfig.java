@@ -35,6 +35,7 @@ public class SecurityConfig {
                                 .requestMatchers("/provider/accepted").permitAll()
                                 .requestMatchers("/provider/get-name").permitAll()
                                 .requestMatchers("/provider/get-category").permitAll()
+                                .requestMatchers("/provider/get-location").permitAll()
                                 .requestMatchers("/category/all").permitAll()
                                 .requestMatchers("/Publications/**").permitAll()
                                 .anyRequest().authenticated()

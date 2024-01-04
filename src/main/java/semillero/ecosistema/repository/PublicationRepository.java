@@ -9,9 +9,10 @@ import java.util.List;
 
 @Repository
 public interface PublicationRepository extends JpaRepository<PublicationEntity, String> {
-    PublicationEntity findByTitle(String title);
-    List<PublicationEntity> findByUsuarioCreadorId(String user_id);
-    List<PublicationEntity> findByHiddenFalse();
+    PublicationEntity findByTitleOrderByDateDesc(String title);
+    List<PublicationEntity> findByUsuarioCreadorIdOrderByDateDesc(String user_id);
+    List<PublicationEntity> findByHiddenFalseOrderByDateDesc();
 
+    List<PublicationEntity> findAllByOrderByDateDesc();
 
 }

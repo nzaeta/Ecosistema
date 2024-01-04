@@ -1,20 +1,28 @@
 package semillero.ecosistema.service.implmentations;
 
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.model.AddressComponent;
+import com.google.maps.model.AddressComponentType;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.LatLng;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
-import semillero.ecosistema.Dto.ProviderRequestDto;
-import semillero.ecosistema.Dto.ProviderResponseDto;
-import semillero.ecosistema.Dto.ProviderUpdateRequestDto;
-import semillero.ecosistema.Dto.ProviderUpdateStatusRequestDto;
+import org.springframework.web.multipart.MultipartFile;
+import semillero.ecosistema.dto.*;
 import semillero.ecosistema.entity.*;
 import semillero.ecosistema.enums.ProviderEnum;
 import semillero.ecosistema.exception.*;
 import semillero.ecosistema.mapper.ProviderMapper;
 import semillero.ecosistema.repository.*;
+import semillero.ecosistema.service.CloudinaryService;
 import semillero.ecosistema.service.contracts.ProviderService;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +34,8 @@ public class ProviderServiceImpl implements ProviderService {
     private final ProviderMapper providerMapper;
     private final CountryRepository countryRepository;
     private final ProvinceRepository provinceRepository;
+    private final CloudinaryService cloudinaryService;
+    private final GeoApiContext geoApiContext;
 
     private static final String STATUS_INITIAL = ProviderEnum.REVISION_INICIAL.name();
     private static final String CAMBIOS_REALIZADOS = ProviderEnum.CAMBIOS_REALIZADOS.name();
@@ -64,6 +74,48 @@ public class ProviderServiceImpl implements ProviderService {
         return providerResponseDtoList;
     }
 
+    @Override
+    public List<ProviderResponseDto> getByLocation(double latitude, double longitude) {
+        try {
+            LatLng latLng = new LatLng(latitude, longitude);
+            GeocodingResult[] results = GeocodingApi.reverseGeocode(geoApiContext, latLng).await();
+
+            String province = null;
+            String city = null;
+            String country = null;
+
+            if (results != null && results.length > 0) {
+                GeocodingResult result = results[0];
+
+                for (AddressComponent ac : result.addressComponents) {
+                    for (AddressComponentType acType : ac.types) {
+                        System.out.println(acType);
+                        if (acType == AddressComponentType.ADMINISTRATIVE_AREA_LEVEL_1) {
+                            province = ac.shortName;
+                        } else if (acType == AddressComponentType.LOCALITY) {
+                            city = ac.shortName;
+                        } else if (acType == AddressComponentType.COUNTRY) {
+                            country = ac.longName;
+                        }
+                    }
+
+                }
+
+                List<ProviderEntity> providerEntityList = providerRepository.findByLocation(country, province, city);
+                List<ProviderResponseDto> providerResponseDtoList = providerMapper.toDtoList(providerEntityList);
+
+                mapperParamsProvider(providerEntityList, providerResponseDtoList);
+                return providerResponseDtoList;
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
     private void mapperParamsProvider(List<ProviderEntity> providerEntityList, List<ProviderResponseDto> providerResponseDtoList) {
         providerResponseDtoList.stream().forEach(providerResponseDto -> {
             providerEntityList.stream().filter(providerEntity -> providerEntity.getId() == providerResponseDto.getId())
@@ -81,7 +133,7 @@ public class ProviderServiceImpl implements ProviderService {
 
 
     @Override
-    public ProviderEntity save(String userId, ProviderRequestDto providerRequestDto) {
+    public ProviderEntity save(String userId, ProviderRequestDto providerRequestDto) throws IOException {
         UserEntity userEntity = getUsersById(userId);
         validateMaxProviders(userEntity);
 
@@ -96,16 +148,45 @@ public class ProviderServiceImpl implements ProviderService {
         providerEntity.setProvince(provincia);
         providerEntity.setCountry(pais);
         providerEntity.setCategory(categoria);
+        List<ImageEntity> images = agregarImagenAProveedor(providerRequestDto.getImages());
+        providerEntity.setImages (images);
 
         ProviderEntity providerSaved = providerRepository.save(providerEntity);
         return providerSaved;
     }
 
+
+    public List<ImageEntity> agregarImagenAProveedor (List <MultipartFile> imagenes) throws IOException {
+
+        List<ImageEntity> listaImagen = new ArrayList<>();
+        try {
+            for (MultipartFile imagen: imagenes) {
+
+                // Subir la imagen a Cloudinary
+                Map subirImagen = cloudinaryService.upload(imagen);
+
+                // Crear y guardar la entidad de Imagen
+                ImageEntity image = new ImageEntity();
+
+                image.setName((String) subirImagen.get("original_filename"));
+                image.setImagenUrl((String) subirImagen.get("url"));
+                image.setCloudinaryId((String) subirImagen.get("public_id"));
+//                     ImageEntity im = imageService.save(image);
+                listaImagen.add(image);
+            }
+            return listaImagen;
+        } catch (IOException e) {
+            throw new RuntimeException("Error al cargar la imagen.");
+        }
+    }
+
     /**
      * Buscar usuario por su ID
+     *
      * @param userId Id de usuario a buscar
      * @return UserEntity encontrado
      */
+
     private UserEntity getUsersById(String userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotExistException());
@@ -115,7 +196,7 @@ public class ProviderServiceImpl implements ProviderService {
      * Validar el maximo de proveedores al crear por usuario
      */
     private void validateMaxProviders(UserEntity userEntity) {
-        if(userEntity.getProviderEntityList().size() >= 3) {
+        if (userEntity.getProviderEntityList().size() >= 3) {
             throw new ProviderMaxCreatedException();
         }
     }
@@ -124,8 +205,10 @@ public class ProviderServiceImpl implements ProviderService {
      * Establecer parametros iniciales de proveedor
      */
     private void parametersInitialProvider(ProviderEntity providerEntity, UserEntity userEntity) {
+
         providerEntity.setStatus(STATUS_INITIAL);
-        providerEntity.setIsNew(true);
+        providerEntity.setFeedBack("Proveedor en revisión");
+                providerEntity.setIsNew(true);
         providerEntity.setDeleted(false);
         providerEntity.setOpenFullImage(false);
         providerEntity.setUser(userEntity);
@@ -144,7 +227,7 @@ public class ProviderServiceImpl implements ProviderService {
         ProviderEntity providerEntity = providerRepository.findById(providerUpdateStatusRequestDto.getProviderId())
                 .orElseThrow(() -> new ProviderNotExistException());
 
-        if(providerEntity != null) {
+        if (providerEntity != null) {
             providerEntity.setStatus(providerUpdateStatusRequestDto.getNewStatus());
             providerEntity.setFeedBack(providerUpdateStatusRequestDto.getNewFeedBack());
             providerRepository.save(providerEntity);
@@ -155,7 +238,7 @@ public class ProviderServiceImpl implements ProviderService {
     }
 
     @Override
-    public ProviderEntity update(ProviderUpdateRequestDto providerUpdateRequestDto) {
+    public ProviderEntity update(ProviderUpdateRequestDto providerUpdateRequestDto) throws IOException {
         UserEntity userEntity = getUsersById(providerUpdateRequestDto.getUsersId());
         CategoryEntity categoryEntity = getCategoryById(providerUpdateRequestDto.getCategoryId());
         CountryEntity countryEntity = getCountryById(providerUpdateRequestDto.getCountryId());
@@ -163,7 +246,7 @@ public class ProviderServiceImpl implements ProviderService {
 
         ProviderEntity existProvider = getProviderById(providerUpdateRequestDto.getId());
 
-        if(existProvider == null) {
+        if (existProvider == null) {
             throw new ProviderNotExistException();
         }
 
@@ -174,11 +257,17 @@ public class ProviderServiceImpl implements ProviderService {
         providerUpdateRequestDto.setIsNew(defaultIfNull(providerUpdateRequestDto.getIsNew(), existProvider.getIsNew()));
         providerUpdateRequestDto.setDeleted(defaultIfNull(providerUpdateRequestDto.getDeleted(), existProvider.getDeleted()));
         providerUpdateRequestDto.setOpenFullImage(defaultIfNull(providerUpdateRequestDto.getOpenFullImage(), existProvider.getOpenFullImage()));
-        providerUpdateRequestDto.setStatus(defaultIfNull(providerUpdateRequestDto.getStatus(), existProvider.getStatus()));
+        providerUpdateRequestDto.setStatus(ProviderEnum.CAMBIOS_REALIZADOS.name());
+        providerUpdateRequestDto.setFeedBack("Los cambios han sido realizados. El administrador realizará la revisión y devolución correspondiente");
 
         /************/
 
+
         ProviderEntity providerEntity = providerMapper.toEntityUpdate(providerUpdateRequestDto);
+        List<ImageEntity> images = agregarImagenAProveedor(providerUpdateRequestDto.getImages());
+        existProvider.getImages().clear();
+//        providerEntity.getImagenes().addAll(images);
+        providerEntity.setImages(images);
 
         providerEntity.setUser(userEntity);
         providerEntity.setCategory(categoryEntity);
@@ -190,7 +279,8 @@ public class ProviderServiceImpl implements ProviderService {
 
     /**
      * METODO PARA VALIDAR
-     * @param value Valor a comparar si es NULL
+     *
+     * @param value        Valor a comparar si es NULL
      * @param defaultValue Valor que devolvera si "value" es NULL
      * @return "value" si es NULL o "defaultValue" si "value" no es NULL
      */
@@ -215,6 +305,13 @@ public class ProviderServiceImpl implements ProviderService {
         return providerRepository.findById(providerId).orElse(null);
     }
 
+    @Override
+    public List<ProviderResponseDto> getByUser(String username) {
+        List<ProviderEntity> providers = providerRepository.listarPorUsuario(username);
+        List<ProviderResponseDto> providerResponseDtoList = providerMapper.toDtoList(providers);
+        mapperParamsProvider(providers, providerResponseDtoList);
+        return providerResponseDtoList;
+    }
 
 
 }

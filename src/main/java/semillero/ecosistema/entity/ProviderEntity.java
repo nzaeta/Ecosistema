@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.List;
+
 @Entity
 @Table(name = "proveedores")
 @Data
@@ -27,7 +29,10 @@ public class ProviderEntity {
     private String instagram;
     private String city;
 
-    private String image; // falta para que guarde 3 imagenes
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "providerId")
+    private List<ImageEntity> images;
+
 
     private Boolean deleted;
     private String feedBack;

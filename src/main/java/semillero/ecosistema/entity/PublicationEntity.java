@@ -29,9 +29,9 @@ public class PublicationEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="fecha_creacion")
     private Date date;
-    @ElementCollection
-    @Column(name="imagenes")
-    private List<String> images = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "publicacionId")
+    private List<ImageEntity> imagenes;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity usuarioCreador;

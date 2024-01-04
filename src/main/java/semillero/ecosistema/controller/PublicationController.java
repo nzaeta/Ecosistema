@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-import semillero.ecosistema.Dto.PublicationRequestDto;
-import semillero.ecosistema.Dto.PublicationResponseDto;
+import semillero.ecosistema.dto.PublicationRequestDto;
+import semillero.ecosistema.dto.PublicationResponseDto;
 import semillero.ecosistema.entity.PublicationEntity;
 import semillero.ecosistema.service.MailService;
 import semillero.ecosistema.service.contracts.PublicationService;
@@ -53,13 +53,13 @@ public class PublicationController {
 
     @Secured("ADMIN")
     @PostMapping("/save")
-    ResponseEntity<?> save(@RequestBody PublicationRequestDto publicationRequestDto){
+    ResponseEntity<?> save(@ModelAttribute PublicationRequestDto publicationRequestDto){
         return publicationService.save(publicationRequestDto);
     }
 
     @Secured("ADMIN")
-    @PatchMapping("/update")
-    ResponseEntity<?> update(@RequestBody PublicationRequestDto publicationRequestDto){
+    @PutMapping("/update")
+    ResponseEntity<?> update(@ModelAttribute PublicationRequestDto publicationRequestDto){
         return publicationService.update(publicationRequestDto);
     }
 

@@ -18,7 +18,7 @@ public class ImageServiceImpl implements ImageService {
         return imagenRepository.findByOrderById();
     }
 
-    //public Optional<ImageEntity> getOne(String id){return imagenRepository.findById(id);}
+    public Optional<ImageEntity> getOne(String id){return imagenRepository.findById(id);}
 
     public Optional<ImageEntity> getImagen(String id){
         return imagenRepository.findById(id);

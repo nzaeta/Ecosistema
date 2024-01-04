@@ -6,8 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
-import semillero.ecosistema.Dto.PublicationRequestDto;
-import semillero.ecosistema.Dto.PublicationResponseDto;
+import semillero.ecosistema.dto.PublicationRequestDto;
+import semillero.ecosistema.dto.PublicationResponseDto;
 import semillero.ecosistema.entity.PublicationEntity;
 import semillero.ecosistema.entity.UserEntity;
 import semillero.ecosistema.repository.UserRepository;
@@ -34,6 +34,7 @@ public interface PublicationMapper {
     default void setUserName(PublicationEntity publicationEntity, @MappingTarget PublicationResponseDto publicationResponseDto){
         if(publicationEntity.getUsuarioCreador() != null){
             publicationResponseDto.setUserName(publicationEntity.getUsuarioCreador().getNombre());
+            publicationResponseDto.setImages(publicationEntity.getImagenes());
         }
     }
 

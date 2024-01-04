@@ -10,7 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
-import semillero.ecosistema.Dto.AuthResponse;
+import semillero.ecosistema.dto.AuthResponse;
 //import semillero.ecosistema.entity.UserEntity;
 import semillero.ecosistema.entity.UserEntity;
 import semillero.ecosistema.jwt.JwtService;
