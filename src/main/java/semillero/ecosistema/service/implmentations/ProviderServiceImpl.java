@@ -2,12 +2,16 @@ package semillero.ecosistema.service.implmentations;
 
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
+import com.google.maps.errors.ApiException;
+import com.google.maps.errors.InvalidRequestException;
 import com.google.maps.model.AddressComponent;
 import com.google.maps.model.AddressComponentType;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import semillero.ecosistema.dto.*;
@@ -108,8 +112,12 @@ public class ProviderServiceImpl implements ProviderService {
                 return providerResponseDtoList;
 
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (InvalidRequestException e) {
+            System.err.println("Error de solicitud no válida: " + e.getMessage());
+            throw new RuntimeException(e.getMessage());
+
+        } catch (ApiException | InterruptedException | IOException e) {
+            System.err.println("Otro tipo de error: " + e.getMessage());
         }
 
         return null;

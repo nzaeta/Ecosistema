@@ -125,8 +125,9 @@ public class ProviderController {
             }
 
             return ResponseEntity.ok(providerResponseDtoList);
-        } catch (ResponseStatusException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageErrorResponse(e.getMessage()));
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
