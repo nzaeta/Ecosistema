@@ -5,6 +5,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import semillero.ecosistema.entity.ProviderEntity;
 import semillero.ecosistema.entity.UserEntity;
+import semillero.ecosistema.repository.ImageRepository;
 import semillero.ecosistema.repository.ProviderRepository;
 import semillero.ecosistema.repository.UserRepository;
 
@@ -19,6 +20,8 @@ public class MailWeeklyService {
     private UserRepository userRepository;
     @Autowired
     private ProviderRepository providerRepository;
+    @Autowired
+    private ImageRepository imageRepository;
 
     @Scheduled(cron = "0 0 12 ? * MON")
     public void enviarEmailSemanal() {
@@ -38,19 +41,18 @@ public class MailWeeklyService {
                 providerRepository.save(provider);
             }
         }
-        String imgUrl = "https://media.istockphoto.com/id/1416243328/es/foto/dise%C3%B1ador-de-interiores-pensando-en-la-coordinaci%C3%B3n.jpg?s=1024x1024&w=is&k=20&c=zbjWQMkrXtDiZsTlS7c52Zgo7JsSIidTriQR29DcKEQ="; //Borrar despues de que este cargado lo de imagenes;
         String provURL = "http://localhost:5173/proveedores"; //Cambiar por el url cuando el Front este deployado
         StringBuilder sb = new StringBuilder();
-        for (ProviderEntity provider : listProviders) {
+        for (ProviderEntity provider : providers) {
             sb.append("<div style=\" width: 152px;height: 236px; overflow: visible; background: #fafafa; cursor: pointer;\"");
             sb.append("onclick=\"window.location.href='"+ provURL +"'\">");
-            sb.append("<div style=\"padding: 0px; padding-top: 8px\"> <img src=\"" + imgUrl + "\" alt=\"image proveedor\" ");
+            sb.append("<div style=\"padding: 0px; padding-top: 8px\"> <img src=\"" + imageRepository.findByProviderId(provider.getId()).get(0).getImagenUrl() + "\" alt=\"image proveedor\" ");
             sb.append("style=\" width: 136px; height: 136px; margin: 0px 8px; border-radius: 8px; \" />");
             sb.append("<div style=\"max-width: 90px; border: 1px solid #2196f3; display: flex; justify-content: center; align-items: center; padding: 2px 8px; border-radius: 4px; box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); background: #fafafa; position: relative; bottom: 155px; left: 47px;\">");
-            sb.append("<span style=\"color: #2196f3; font-size: 13px; padding: 0px 8px\">"+ provider.getCategory().getNombre() +"</span></div>");
+            sb.append("<span style=\" color: #2196f3; font-size: 13px; padding: 0px 8px\">"+ provider.getCategory().getNombre() +"</span></div>");
             sb.append(" <div style=\" position: relative; bottom: 22px; height: 60px; margin-top: 6px;\">");
-            sb.append("<span style=\"display: block; font-size: 16px; margin: 0px 8px; font-weight: 600\">"+provider.getName()+"</span>");
-            sb.append("<span style=\"display: block; font-size: 13px; margin: 0px 8px; font-weight: 400; color: #222;\">"+provider.getDescription()+"</span> </div>");
+            sb.append("<span style=\"white-space: nowrap; text-overflow: ellipsis; overflow: hidden; display: block; font-size: 16px; margin: 0px 8px; font-weight: 600\">"+provider.getName()+"</span>");
+            sb.append("<span style=\"display: block; font-size: 13px; margin: 0px 8px; font-weight: 400; color: #222; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;\">"+provider.getDescription()+"</span> </div>");
             sb.append("<div style=\"display: flex; align-items: center; position: relative; bottom: 24px; left: 6px; gap: 4px;\">");
             sb.append("<img src=\"https://icones.pro/wp-content/uploads/2021/02/icone-de-localisation-violette.png\" alt=\"Location\" ");
             sb.append("style=\"width: 24px; height: 24px\"/><span style=\"font-size: 13px; font-weight: 400\">"+provider.getCity()+"</span></div></div></div>");
