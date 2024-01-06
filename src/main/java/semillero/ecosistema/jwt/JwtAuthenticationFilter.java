@@ -1,11 +1,14 @@
 package semillero.ecosistema.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +19,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -37,6 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
+        try {
         username=jwtService.getUsernameFromToken(token);
 
         if (username!=null && SecurityContextHolder.getContext().getAuthentication()==null)
@@ -54,10 +60,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
-
         }
 
         filterChain.doFilter(request, response);
+
+        } catch (ExpiredJwtException ex) {
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.getWriter().write("{ \"message\": \"Token expirado\"}");
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            return;
+        }
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {
