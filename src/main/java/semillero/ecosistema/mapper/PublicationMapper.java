@@ -6,13 +6,17 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
+import semillero.ecosistema.dto.ImageDto;
 import semillero.ecosistema.dto.PublicationRequestDto;
 import semillero.ecosistema.dto.PublicationResponseDto;
+import semillero.ecosistema.entity.ImageEntity;
 import semillero.ecosistema.entity.PublicationEntity;
 import semillero.ecosistema.entity.UserEntity;
 import semillero.ecosistema.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface PublicationMapper {
@@ -34,8 +38,25 @@ public interface PublicationMapper {
     default void setUserName(PublicationEntity publicationEntity, @MappingTarget PublicationResponseDto publicationResponseDto){
         if(publicationEntity.getUsuarioCreador() != null){
             publicationResponseDto.setUserName(publicationEntity.getUsuarioCreador().getNombre());
-            publicationResponseDto.setImages(publicationEntity.getImagenes());
+
+            List<ImageDto> imageDtos = new ArrayList<>();
+            for(ImageEntity image:publicationEntity.getImagenes()){
+                ImageDto imageDto = new ImageDto();
+                imageDto.setId(image.getId());
+                imageDto.setName(image.getName());
+                imageDto.setImagenUrl(image.getImagenUrl());
+                imageDto.setCloudinartId(image.getCloudinaryId());
+                imageDto.setProvider(image.getProvider());
+                imageDto.setPublication(image.getPublicationEntity());
+                imageDtos.add(imageDto);
+            }
+            List<ImageEntity> list = publicationEntity.getImagenes();
+            if ( list != null ) {
+                publicationResponseDto.setImages( imageDtos );
+            }
         }
     }
+
+
 
 }

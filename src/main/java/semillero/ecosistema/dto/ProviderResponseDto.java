@@ -20,7 +20,7 @@ public class ProviderResponseDto {
     private String instagram;
     private String city;
     private String about; // descripcion larga del producto
-    private List<ImageEntity> images;
+    private List<ImageDto> images;
     private Boolean isNew;
     private Boolean deleted;
     private String status;
