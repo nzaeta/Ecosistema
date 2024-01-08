@@ -47,7 +47,7 @@ public class MailService {
     }
 
     //Descomentar para probar en el momento
-    @PostConstruct
+    /*@PostConstruct
     public void initialize() {
 
         List<UserEntity> usuarios = userRepository.findAll();
@@ -91,6 +91,6 @@ public class MailService {
         String subject = "Correo de Prueba 19";
         String content = firstPart + repeatedHtml + secondPart;
         sendEmail(to, subject, content);
-    }
+    }*/
 
 }
