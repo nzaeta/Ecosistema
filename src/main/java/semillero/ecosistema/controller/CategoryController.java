@@ -24,7 +24,7 @@ public class CategoryController {
     public ResponseEntity<List<CategoryEntity>> getAll() {
         List<CategoryEntity> categoryEntityList = categoryService.getAll();
         try {
-            if(categoryEntityList.isEmpty()) {
+            if (categoryEntityList.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }
             return ResponseEntity.ok(categoryEntityList);
@@ -37,7 +37,7 @@ public class CategoryController {
     public ResponseEntity<CategoryEntity> getByName(@RequestParam String name) {
         CategoryEntity categoryEntity = categoryService.getByName(name);
         try {
-            if(categoryEntity == null) {
+            if (categoryEntity == null) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }
             return ResponseEntity.ok(categoryEntity);

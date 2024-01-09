@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import semillero.ecosistema.entity.ProviderEntity;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface ProviderRepository extends JpaRepository<ProviderEntity, String> {
@@ -30,5 +31,9 @@ public interface ProviderRepository extends JpaRepository<ProviderEntity, String
 
     @Query("SELECT a FROM ProviderEntity a WHERE a.deleted = false and a.user.email = :usuario")
     public List<ProviderEntity> listarPorUsuario(@Param("usuario") String usuario);
+
+    @Query("SELECT c.nombre AS categoryName, COUNT(p.id) AS providerCount FROM ProviderEntity p JOIN p.category c GROUP BY c.nombre")
+    List<Object[]> getProvidersPerCategory();
+
 
 }

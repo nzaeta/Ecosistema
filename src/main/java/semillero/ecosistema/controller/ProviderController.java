@@ -2,6 +2,7 @@ package semillero.ecosistema.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import semillero.ecosistema.dto.*;
 import semillero.ecosistema.exception.*;
+import semillero.ecosistema.repository.ProviderRepository;
 import semillero.ecosistema.service.contracts.ProviderService;
 
 
@@ -26,6 +28,9 @@ import java.util.Map;
 public class ProviderController {
 
     private final ProviderService providerService;
+
+    @Autowired
+    private ProviderRepository providerRepository;
 
     @Secured("ADMIN")
     @GetMapping("/all")
@@ -224,6 +229,18 @@ public class ProviderController {
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    @GetMapping("/providersPerCategory")
+    public ResponseEntity<?> getProvidersPerCategory() {
+        List<Object[]> results = providerRepository.getProvidersPerCategory();
+        Map<String, Long> list = new HashMap<>();
+        for (Object[] result : results) {
+            String categoryName = (String) result[0];
+            Long providerCount = (Long) result[1];
+            list.put(categoryName, providerCount);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
 }
