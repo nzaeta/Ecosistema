@@ -190,7 +190,7 @@ public class PublicationServiceImpl  implements PublicationService {
             publication.setContent(publicationUpdateRequestDto.getContent());
             publication.setDate(publicationUpdateRequestDto.getDate());
             publication.setVisualizations(publicationUpdateRequestDto.getVisualizations());
-            List<ImageEntity> imagenes = modificarImagenEnPublicacion(publicationUpdateRequestDto);
+            List<ImageEntity> imagenes = modificarImagenEnPublicacion(publicationUpdateRequestDto, publication);
             publication.getImagenes().addAll(imagenes);
             publicationRepository.save(publication);
             return ResponseEntity.ok().body("UPDATED");
@@ -198,11 +198,14 @@ public class PublicationServiceImpl  implements PublicationService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }
+
+    @Transactional
     public List<ImageEntity>  modificarImagenEnPublicacion
-            (PublicationUpdateRequestDto publicationUpdateRequestDto) throws IOException {
+            (PublicationUpdateRequestDto publicationUpdateRequestDto, PublicationEntity publication) throws IOException {
         List<String> imagenesParaBorrar = new ArrayList<>(publicationUpdateRequestDto.getImagenesParaBorrar());
         for (String id : imagenesParaBorrar) {
             ImageEntity imagen = imageService.getImagen(id).get();
+            publication.getImagenes().remove(imagen);
             cloudinaryService.delete(imagen.getCloudinaryId());
             imageService.delete(id);
         }
