@@ -8,6 +8,7 @@ import semillero.ecosistema.entity.ImageEntity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -19,7 +20,7 @@ public class PublicationResponseDto {
     private String content;
     private boolean hidden;
     private Date date;
-    private List<ImageEntity> images;
+    private List<ImageDto> images;
     private int visualizations;
 
 

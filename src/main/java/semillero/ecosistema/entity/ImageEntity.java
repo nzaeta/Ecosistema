@@ -1,8 +1,6 @@
 package semillero.ecosistema.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +20,13 @@ public class ImageEntity {
         private String name;
         private String imagenUrl;
         private String cloudinaryId; // Es el id de Cloudinary
+        @ManyToOne
+        @JoinColumn(name = "providerId")
+        private ProviderEntity provider;
 
+        @ManyToOne
+        @JoinColumn(name = "publicacionId")
+        private PublicationEntity publicationEntity;
 
 
 }
