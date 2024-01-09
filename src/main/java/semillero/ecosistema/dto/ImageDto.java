@@ -10,7 +10,7 @@ public class ImageDto {
     private String id;
     private String name;
     private String imagenUrl;
-    private String cloudinartId;
+    private String cloudinaryId;
     private String provider;
     private String publication;
 

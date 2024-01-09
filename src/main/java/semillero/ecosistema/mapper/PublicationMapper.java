@@ -45,7 +45,7 @@ public interface PublicationMapper {
                 imageDto.setId(image.getId());
                 imageDto.setName(image.getName());
                 imageDto.setImagenUrl(image.getImagenUrl());
-                imageDto.setCloudinartId(image.getCloudinaryId());
+                imageDto.setCloudinaryId(image.getCloudinaryId());
                 imageDto.setProvider(image.getProvider());
                 imageDto.setPublication(image.getPublicationEntity());
                 imageDtos.add(imageDto);
