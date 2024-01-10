@@ -277,6 +277,15 @@ public class ProviderServiceImpl implements ProviderService {
             providerEntity.setStatus(ProviderEnum.CAMBIOS_REALIZADOS.name());
             providerEntity.setFeedBack("Los cambios han sido realizados. El administrador realizará la revisión y devolución correspondiente");
 
+            ProvinceEntity provincia = provinceRepository.getReferenceById(providerUpdateRequestDto.getProvinceId());
+            CountryEntity pais = countryRepository.getReferenceById(providerUpdateRequestDto.getCountryId());
+            CategoryEntity categoria = categoryRepository.getReferenceById(providerUpdateRequestDto.getCategoryId());
+
+            providerEntity.setProvince(provincia);
+            providerEntity.setCountry(pais);
+            providerEntity.setCategory(categoria);
+            providerEntity.setCity(providerUpdateRequestDto.getCity());
+
             List<ImageEntity> imagenes = modificarImagenEnProveedor(providerUpdateRequestDto, providerEntity);
             providerEntity.getImages().addAll(imagenes);
 

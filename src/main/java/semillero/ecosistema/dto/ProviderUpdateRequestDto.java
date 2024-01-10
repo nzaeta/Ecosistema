@@ -31,4 +31,9 @@ public class ProviderUpdateRequestDto {
     private boolean imagenesBorrarVacio;
     private boolean imagenesNuevasVacio;
 
+    private String categoryId;
+    private String countryId; // pais ID
+    private String provinceId; // provincia/estado ID
+    private String city;
+
 }
