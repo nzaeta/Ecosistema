@@ -67,7 +67,7 @@ public class PublicationController {
 
     @Secured("ADMIN")
     @PutMapping("/update")
-    ResponseEntity<?> updatePublication(@ModelAttribute @Valid PublicationUpdateRequestDto publicationUpdateRequestDto){
+    ResponseEntity<?> updatePublication(@ModelAttribute PublicationUpdateRequestDto publicationUpdateRequestDto){
         return publicationService.updatePublication(publicationUpdateRequestDto);
     }
 

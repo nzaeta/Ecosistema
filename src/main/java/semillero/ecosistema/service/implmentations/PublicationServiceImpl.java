@@ -182,7 +182,7 @@ public class PublicationServiceImpl  implements PublicationService {
             imageService.delete(id);
         }
         List <MultipartFile> lista = publicationUpdateRequestDto.getImagenesNuevas();
-        if (lista.get(0).isEmpty() == false){
+        if (lista.size() > 0){
             List<ImageEntity> listaImagen = agregarImagenAPublicacion(lista);
             publication.getImagenes().addAll(listaImagen);
         }

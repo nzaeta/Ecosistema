@@ -251,19 +251,6 @@ public class ProviderServiceImpl implements ProviderService {
     @Override
     public ResponseEntity<?> update(ProviderUpdateRequestDto providerUpdateRequestDto){
         try {
-            /**
-             *  ESTABLECE VALORES PREDETERMINADOS DE LA BASE DE DATOS SI EN EL ProviderUpdateRequestDto NO SE PASA ALGUN VALOR.
-             *  CON EL PROPOSITO PARA QUE NO GUARDE NULL AL MOMENTO DE ACTUALIZAR UN PROVEEDOR
-             */
-        /*providerUpdateRequestDto.setIsNew(defaultIfNull(providerUpdateRequestDto.getIsNew(), existProvider.getIsNew()));
-        providerUpdateRequestDto.setDeleted(defaultIfNull(providerUpdateRequestDto.getDeleted(), existProvider.getDeleted()));
-        providerUpdateRequestDto.setOpenFullImage(defaultIfNull(providerUpdateRequestDto.getOpenFullImage(), existProvider.getOpenFullImage()));
-        providerUpdateRequestDto.setStatus(ProviderEnum.CAMBIOS_REALIZADOS.name());
-        providerUpdateRequestDto.setFeedBack("Los cambios han sido realizados. El administrador realizará la revisión y devolución correspondiente");
-        */
-            /************/
-
-
             //ProviderEntity providerEntity = providerMapper.toEntityUpdate(providerUpdateRequestDto); //Entiendo que esto me da un provider Entity
         /*List<ImageEntity> images = agregarImagenAProveedor(providerUpdateRequestDto.getImages());
         existProvider.getImages().clear();
@@ -278,7 +265,12 @@ public class ProviderServiceImpl implements ProviderService {
             providerEntity.setFacebook(providerUpdateRequestDto.getFacebook());
             providerEntity.setInstagram(providerUpdateRequestDto.getInstagram());
             providerEntity.setAbout(providerUpdateRequestDto.getAbout());
-            modificarImagenEnProveedor(providerUpdateRequestDto,providerEntity);
+            providerEntity.setStatus(ProviderEnum.CAMBIOS_REALIZADOS.name());
+            providerEntity.setFeedBack("Los cambios han sido realizados. El administrador realizará la revisión y devolución correspondiente");
+
+            List<ImageEntity> imagenes = modificarImagenEnProveedor(providerUpdateRequestDto, providerEntity);
+            providerEntity.getImages().addAll(imagenes);
+
             providerRepository.save(providerEntity);
             return ResponseEntity.ok().body("UPDATED");
         }catch (Exception e) {
@@ -290,7 +282,7 @@ public class ProviderServiceImpl implements ProviderService {
 
     //Metodos para modificar Imagenes
     @Transactional
-    public void  modificarImagenEnProveedor
+    public List<ImageEntity> modificarImagenEnProveedor
     (ProviderUpdateRequestDto providerUpdateRequestDto, ProviderEntity provider) throws IOException {
         List<String> imagenesParaBorrar = new ArrayList<>(providerUpdateRequestDto.getImagenesParaBorrar());
         for (String id : imagenesParaBorrar) {
@@ -299,12 +291,11 @@ public class ProviderServiceImpl implements ProviderService {
             cloudinaryService.delete(imagen.getCloudinaryId());
             imageService.delete(id);
         }
-        List <MultipartFile> lista = providerUpdateRequestDto.getImagenesNuevas();
-        if (lista.get(0).isEmpty() == false){
-            List<ImageEntity> listaImagen = agregarImagenAProveedor(lista);
-            provider.getImages().addAll(listaImagen);
+        List<ImageEntity> listaImagen = new ArrayList();
+        if (providerUpdateRequestDto.getImagenesNuevas().size()>0) {
+            listaImagen = agregarImagenAProveedor(providerUpdateRequestDto.getImagenesNuevas());
         }
-
+        return listaImagen;
     }
     /**
      * METODO PARA VALIDAR

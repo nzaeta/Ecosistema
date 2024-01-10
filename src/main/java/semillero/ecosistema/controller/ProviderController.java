@@ -195,7 +195,7 @@ public class ProviderController {
     }
     @Secured("USER")
     @PutMapping("/update")
-    public ResponseEntity<?> update(@ModelAttribute @Valid ProviderUpdateRequestDto providerUpdateRequestDto) {
+    public ResponseEntity<?> update(@ModelAttribute ProviderUpdateRequestDto providerUpdateRequestDto) {
         return providerService.update(providerUpdateRequestDto);
         /*try {
             if(providerUpdateRequestDto == null) {
