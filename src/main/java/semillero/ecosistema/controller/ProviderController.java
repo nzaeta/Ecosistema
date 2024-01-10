@@ -196,8 +196,8 @@ public class ProviderController {
     @Secured("USER")
     @PutMapping("/update")
     public ResponseEntity<?> update(@ModelAttribute @Valid ProviderUpdateRequestDto providerUpdateRequestDto) {
-
-        try {
+        return providerService.update(providerUpdateRequestDto);
+        /*try {
             if(providerUpdateRequestDto == null) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }
@@ -210,7 +210,7 @@ public class ProviderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }*/
     }
 
     private ErrorResponse messageErrorResponse(String message) {

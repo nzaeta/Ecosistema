@@ -1,5 +1,6 @@
 package semillero.ecosistema.service.contracts;
 
+import org.springframework.http.ResponseEntity;
 import semillero.ecosistema.dto.ProviderRequestDto;
 import semillero.ecosistema.dto.ProviderResponseDto;
 import semillero.ecosistema.dto.ProviderUpdateStatusRequestDto;
@@ -23,7 +24,8 @@ public interface ProviderService {
 
     List<ProviderResponseDto> getByStatus();
     Boolean updateStatus(ProviderUpdateStatusRequestDto providerUpdateStatusRequestDto);
-    ProviderEntity update(ProviderUpdateRequestDto providerUpdateRequestDto) throws IOException;
+    //ProviderEntity update(ProviderUpdateRequestDto providerUpdateRequestDto) throws IOException;
+    ResponseEntity<?> update(ProviderUpdateRequestDto providerUpdateRequestDto);
 
     List<ProviderResponseDto> getByLocation(double latitude, double longitude);
 

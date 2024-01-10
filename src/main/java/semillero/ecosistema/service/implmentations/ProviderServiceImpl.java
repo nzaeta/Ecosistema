@@ -13,6 +13,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import semillero.ecosistema.dto.*;
 import semillero.ecosistema.entity.*;
@@ -21,6 +22,7 @@ import semillero.ecosistema.exception.*;
 import semillero.ecosistema.mapper.ProviderMapper;
 import semillero.ecosistema.repository.*;
 import semillero.ecosistema.service.CloudinaryService;
+import semillero.ecosistema.service.contracts.ImageService;
 import semillero.ecosistema.service.contracts.ProviderService;
 
 import java.io.IOException;
@@ -40,6 +42,7 @@ public class ProviderServiceImpl implements ProviderService {
     private final ProvinceRepository provinceRepository;
     private final CloudinaryService cloudinaryService;
     private final GeoApiContext geoApiContext;
+    private final ImageService imageService;
 
     private static final String STATUS_INITIAL = ProviderEnum.REVISION_INICIAL.name();
     private static final String CAMBIOS_REALIZADOS = ProviderEnum.CAMBIOS_REALIZADOS.name();
@@ -163,7 +166,7 @@ public class ProviderServiceImpl implements ProviderService {
         return providerSaved;
     }
 
-
+    //Tener en cuenta
     public List<ImageEntity> agregarImagenAProveedor (List <MultipartFile> imagenes) throws IOException {
 
         List<ImageEntity> listaImagen = new ArrayList<>();
@@ -246,45 +249,63 @@ public class ProviderServiceImpl implements ProviderService {
     }
 
     @Override
-    public ProviderEntity update(ProviderUpdateRequestDto providerUpdateRequestDto) throws IOException {
-        UserEntity userEntity = getUsersById(providerUpdateRequestDto.getUsersId());
-        CategoryEntity categoryEntity = getCategoryById(providerUpdateRequestDto.getCategoryId());
-        CountryEntity countryEntity = getCountryById(providerUpdateRequestDto.getCountryId());
-        ProvinceEntity provinceEntity = getProvinceById(providerUpdateRequestDto.getProvinceId());
-
-        ProviderEntity existProvider = getProviderById(providerUpdateRequestDto.getId());
-
-        if (existProvider == null) {
-            throw new ProviderNotExistException();
-        }
-
-        /**
-         *  ESTABLECE VALORES PREDETERMINADOS DE LA BASE DE DATOS SI EN EL ProviderUpdateRequestDto NO SE PASA ALGUN VALOR.
-         *  CON EL PROPOSITO PARA QUE NO GUARDE NULL AL MOMENTO DE ACTUALIZAR UN PROVEEDOR
-         */
-        providerUpdateRequestDto.setIsNew(defaultIfNull(providerUpdateRequestDto.getIsNew(), existProvider.getIsNew()));
+    public ResponseEntity<?> update(ProviderUpdateRequestDto providerUpdateRequestDto){
+        try {
+            /**
+             *  ESTABLECE VALORES PREDETERMINADOS DE LA BASE DE DATOS SI EN EL ProviderUpdateRequestDto NO SE PASA ALGUN VALOR.
+             *  CON EL PROPOSITO PARA QUE NO GUARDE NULL AL MOMENTO DE ACTUALIZAR UN PROVEEDOR
+             */
+        /*providerUpdateRequestDto.setIsNew(defaultIfNull(providerUpdateRequestDto.getIsNew(), existProvider.getIsNew()));
         providerUpdateRequestDto.setDeleted(defaultIfNull(providerUpdateRequestDto.getDeleted(), existProvider.getDeleted()));
         providerUpdateRequestDto.setOpenFullImage(defaultIfNull(providerUpdateRequestDto.getOpenFullImage(), existProvider.getOpenFullImage()));
         providerUpdateRequestDto.setStatus(ProviderEnum.CAMBIOS_REALIZADOS.name());
         providerUpdateRequestDto.setFeedBack("Los cambios han sido realizados. El administrador realizará la revisión y devolución correspondiente");
+        */
+            /************/
 
-        /************/
 
-
-        ProviderEntity providerEntity = providerMapper.toEntityUpdate(providerUpdateRequestDto);
-        List<ImageEntity> images = agregarImagenAProveedor(providerUpdateRequestDto.getImages());
+            //ProviderEntity providerEntity = providerMapper.toEntityUpdate(providerUpdateRequestDto); //Entiendo que esto me da un provider Entity
+        /*List<ImageEntity> images = agregarImagenAProveedor(providerUpdateRequestDto.getImages());
         existProvider.getImages().clear();
 //        providerEntity.getImagenes().addAll(images);
-        providerEntity.setImages(images);
+        providerEntity.setImages(images);*/
+            ProviderEntity providerEntity = providerRepository.findById(providerUpdateRequestDto.getId())
+                    .orElseThrow(ProviderNotExistException::new);
+            providerEntity.setName(providerUpdateRequestDto.getName());
+            providerEntity.setDescription(providerUpdateRequestDto.getDescription());
+            providerEntity.setNumberPhone(providerUpdateRequestDto.getNumberPhone());
+            providerEntity.setEmail(providerUpdateRequestDto.getEmail());
+            providerEntity.setFacebook(providerUpdateRequestDto.getFacebook());
+            providerEntity.setInstagram(providerUpdateRequestDto.getInstagram());
+            providerEntity.setAbout(providerUpdateRequestDto.getAbout());
+            modificarImagenEnProveedor(providerUpdateRequestDto,providerEntity);
+            providerRepository.save(providerEntity);
+            return ResponseEntity.ok().body("UPDATED");
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+        }
 
-        providerEntity.setUser(userEntity);
-        providerEntity.setCategory(categoryEntity);
-        providerEntity.setCountry(countryEntity);
-        providerEntity.setProvince(provinceEntity);
 
-        return providerRepository.save(providerEntity);
     }
 
+    //Metodos para modificar Imagenes
+    @Transactional
+    public void  modificarImagenEnProveedor
+    (ProviderUpdateRequestDto providerUpdateRequestDto, ProviderEntity provider) throws IOException {
+        List<String> imagenesParaBorrar = new ArrayList<>(providerUpdateRequestDto.getImagenesParaBorrar());
+        for (String id : imagenesParaBorrar) {
+            ImageEntity imagen = imageService.getImagen(id).get();
+            provider.getImages().remove(imagen);
+            cloudinaryService.delete(imagen.getCloudinaryId());
+            imageService.delete(id);
+        }
+        List <MultipartFile> lista = providerUpdateRequestDto.getImagenesNuevas();
+        if (lista.get(0).isEmpty() == false){
+            List<ImageEntity> listaImagen = agregarImagenAProveedor(lista);
+            provider.getImages().addAll(listaImagen);
+        }
+
+    }
     /**
      * METODO PARA VALIDAR
      *
