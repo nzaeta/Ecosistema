@@ -59,14 +59,14 @@ public class PublicationController {
         return publicationService.save(publicationRequestDto);
     }
 
-    @Secured("ADMIN")
+    /*@Secured("ADMIN")
     @PutMapping("/update")
     ResponseEntity<?> update(@ModelAttribute @Valid PublicationRequestDto publicationRequestDto){
         return publicationService.update(publicationRequestDto);
-    }
+    }*/
 
     @Secured("ADMIN")
-    @PutMapping("/update2")
+    @PutMapping("/update")
     ResponseEntity<?> updatePublication(@ModelAttribute @Valid PublicationUpdateRequestDto publicationUpdateRequestDto){
         return publicationService.updatePublication(publicationUpdateRequestDto);
     }
@@ -81,11 +81,6 @@ public class PublicationController {
     @PatchMapping("/active")
     ResponseEntity<?> active(@RequestParam String id){
         return publicationService.active(id);
-    }
-
-    @GetMapping("/mail")
-    void sendEmail(){
-
     }
 
 }

@@ -152,33 +152,6 @@ public class PublicationServiceImpl  implements PublicationService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }
-// si funciona el otro update, este se borra
-    @Override
-    @Transactional
-    public ResponseEntity<?> update(PublicationRequestDto publicationRequestDto) {
-        try {
-            PublicationEntity publication = publicationRepository.findById(publicationRequestDto.getId())
-                    .orElseThrow(PublicationNotExistException::new);
-
-           // List<String> images = new ArrayList<>();
-            publication.setTitle(publicationRequestDto.getTitle());
-            publication.setContent(publicationRequestDto.getContent());
-            publication.setDate(publicationRequestDto.getDate());
-            publication.setVisualizations(publicationRequestDto.getVisualizations());
-            List<ImageEntity> imagenes = agregarImagenAPublicacion(publicationRequestDto.getImages());
-            publication.getImagenes().clear();
-            publication.getImagenes().addAll(imagenes);
-            publicationRepository.save(publication);
-            return ResponseEntity.ok().body("UPDATED");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
-        }
-    }
-
-    @Override
-    public ResponseEntity<?> agregarImagen(PublicationRequestDto publicationRequestDto) throws IOException {
-        return null;
-    }
 
     @Transactional
     @Override
@@ -190,8 +163,7 @@ public class PublicationServiceImpl  implements PublicationService {
             publication.setContent(publicationUpdateRequestDto.getContent());
             publication.setDate(publicationUpdateRequestDto.getDate());
             publication.setVisualizations(publicationUpdateRequestDto.getVisualizations());
-            List<ImageEntity> imagenes = modificarImagenEnPublicacion(publicationUpdateRequestDto, publication);
-            publication.getImagenes().addAll(imagenes);
+            modificarImagenEnPublicacion(publicationUpdateRequestDto, publication);
             publicationRepository.save(publication);
             return ResponseEntity.ok().body("UPDATED");
         } catch (Exception e) {
@@ -200,7 +172,7 @@ public class PublicationServiceImpl  implements PublicationService {
     }
 
     @Transactional
-    public List<ImageEntity>  modificarImagenEnPublicacion
+    public void  modificarImagenEnPublicacion
             (PublicationUpdateRequestDto publicationUpdateRequestDto, PublicationEntity publication) throws IOException {
         List<String> imagenesParaBorrar = new ArrayList<>(publicationUpdateRequestDto.getImagenesParaBorrar());
         for (String id : imagenesParaBorrar) {
@@ -209,83 +181,15 @@ public class PublicationServiceImpl  implements PublicationService {
             cloudinaryService.delete(imagen.getCloudinaryId());
             imageService.delete(id);
         }
-
-        List<ImageEntity> listaImagen = agregarImagenAPublicacion(publicationUpdateRequestDto.getImagenesNuevas());
-        return listaImagen;
-    }
-/*
-                for (MultipartFile imagen: publicationUpdateRequestDto.getImagenesNuevas()) {
-
-                        // Subir la imagen a Cloudinary
-                        Map subirImagen = cloudinaryService.upload(imagen);
-
-                        //Crea la imagen en la BD
-                        ImageEntity image = new ImageEntity();
-                        image.setName((String) subirImagen.get("original_filename"));
-                        image.setImagenUrl((String) subirImagen.get("url"));
-                        image.setCloudinaryId((String) subirImagen.get("public_id"));
-                        listaImagen.add(image);
-                }
-           return listaImagen;
-*/
-
-
-
-/*
-
-    @Override
-    public ResponseEntity<?> agregarImagen(PublicationRequestDto publicationRequestDto) throws IOException {
-        List<ImageEntity> listaImagen = new ArrayList<>();
-        try {
-            for (MultipartFile imagen: publicationRequestDto.getImages()) {
-                if (validateImageSize(imagen)) {
-                    // Subir la imagen a Cloudinary
-                    Map subirImagen = cloudinaryService.upload(imagen);
-
-                    // Crear y guardar la entidad de Imagen
-                    ImageEntity image = new ImageEntity();
-
-                    image.setName((String) subirImagen.get("original_filename"));
-                    image.setImagenUrl((String) subirImagen.get("url"));
-                    image.setCloudinaryId((String) subirImagen.get("public_id"));
-//                     ImageEntity im = imageService.save(image);
-                    listaImagen.add(image);
-
-
-                } else {
-                    return new ResponseEntity<>("El tamaño de la imagen supera 1M", HttpStatusCode.valueOf(400));
-
-                }
-            }
-        } catch (IOException e) {
-            return new ResponseEntity<>("Error al cargar la imagen", HttpStatusCode.valueOf(400));
-
+        List <MultipartFile> lista = publicationUpdateRequestDto.getImagenesNuevas();
+        if (lista.get(0).isEmpty() == false){
+            List<ImageEntity> listaImagen = agregarImagenAPublicacion(lista);
+            publication.getImagenes().addAll(listaImagen);
         }
-        return new ResponseEntity<>(listaImagen, HttpStatusCode.valueOf(200));
+
     }
-
-    public boolean validateImageSize(MultipartFile file) {
-        try {
-            // Obtiene el tamaño del archivo en bytes
-            long fileSizeInBytes = file.getSize();
-            // Verifica si el tamaño es superior a 1 MB
-            if (fileSizeInBytes > 1 * 1024 * 1024) {
-                return false;
-            }
-            return true;
-
-        } catch (ExcessImageSizeException e) {
-            return false; // Tamaño no válido
-        }
-    }
-
-*/
-    //Este es el método que se usa en el SAVE
+    //Este es el método que se usa en el SAVE y Update
     public List<ImageEntity> agregarImagenAPublicacion (List <MultipartFile> lista) throws IOException {
-
-//             PublicationEntity publicacion = publicationRepository.findById(publicationRequestDto.getId())
-//                     .orElseThrow(PublicationNotExistException::new);
-//             validarLimiteDeImagenes(publicacion);
             List<ImageEntity> listaImagen = new ArrayList<>();
               try {
                  for (MultipartFile imagen: lista) {
@@ -307,13 +211,6 @@ public class PublicationServiceImpl  implements PublicationService {
                  throw new RuntimeException("Error al cargar la imagen.");
              }
          }
-
-   /* private void validarLimiteDeImagenes(@NotNull PublicationEntity publicacion) {
-        if (publicacion.getImagenes().size() > 3 || publicacion.getImagenes().isEmpty()) {
-            throw new ImagenesPorPublicacionException();
-        }
-    }
-*/
 
     @Override
     public ResponseEntity<?> delete(String id){

@@ -18,9 +18,9 @@ public interface PublicationService {
     ResponseEntity<?> getByDeletedFalse();
     ResponseEntity<?> getByUsuarioId(String user_id);
     ResponseEntity<?> save(PublicationRequestDto publicationRequestDto);
-    ResponseEntity<?> update(PublicationRequestDto publicationRequestDto);
+    //ResponseEntity<?> update(PublicationRequestDto publicationRequestDto);
 
-    ResponseEntity<?> agregarImagen(PublicationRequestDto publicationRequestDto) throws IOException;
+    //ResponseEntity<?> agregarImagen(PublicationRequestDto publicationRequestDto) throws IOException;
 
     @Transactional
     ResponseEntity<?> updatePublication(PublicationUpdateRequestDto publicationUpdateRequestDto);
