@@ -250,6 +250,15 @@ public class ProviderServiceImpl implements ProviderService {
 
     @Override
     public ResponseEntity<?> update(ProviderUpdateRequestDto providerUpdateRequestDto){
+        if (providerUpdateRequestDto.isImagenesBorrarVacio()){
+            providerUpdateRequestDto.setImagenesParaBorrar(new ArrayList<>());
+        }
+        if (providerUpdateRequestDto.isImagenesNuevasVacio()){
+            providerUpdateRequestDto.setImagenesNuevas(new ArrayList<>());
+        }
+
+
+
         try {
             //ProviderEntity providerEntity = providerMapper.toEntityUpdate(providerUpdateRequestDto); //Entiendo que esto me da un provider Entity
         /*List<ImageEntity> images = agregarImagenAProveedor(providerUpdateRequestDto.getImages());

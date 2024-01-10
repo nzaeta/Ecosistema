@@ -156,6 +156,13 @@ public class PublicationServiceImpl  implements PublicationService {
     @Transactional
     @Override
     public ResponseEntity<?> updatePublication(PublicationUpdateRequestDto publicationUpdateRequestDto) {
+        if (publicationUpdateRequestDto.isImagenesBorrarVacio()){
+            publicationUpdateRequestDto.setImagenesParaBorrar(new ArrayList<>());
+        }
+        if (publicationUpdateRequestDto.isImagenesNuevasVacio()){
+            publicationUpdateRequestDto.setImagenesNuevas(new ArrayList<>());
+        }
+
         try {
             PublicationEntity publication = publicationRepository.findById(publicationUpdateRequestDto.getId())
                     .orElseThrow(PublicationNotExistException::new);

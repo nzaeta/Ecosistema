@@ -28,5 +28,7 @@ public class ProviderUpdateRequestDto {
     private List<String> imagenesParaBorrar;
     private List<MultipartFile> imagenesNuevas;
     private String usersId;
+    private boolean imagenesBorrarVacio;
+    private boolean imagenesNuevasVacio;
 
 }

@@ -24,4 +24,6 @@ public class PublicationUpdateRequestDto {
     private List<String> imagenesParaBorrar;
     private List<MultipartFile> imagenesNuevas;
     private int visualizations;
+    private boolean imagenesBorrarVacio;
+    private boolean imagenesNuevasVacio;
 }
