@@ -35,11 +35,11 @@ public class ProviderRequestDto {
             message = "Debe ingresar una dirección de correo válida.")
     private String email;
 
-    @NotEmpty(message = "Campo obligatorio.")
+//    @NotEmpty(message = "Campo obligatorio.")
     @URL(message = "Debe ingresar un website válido.")
     private String facebook;
 
-    @NotEmpty(message = "Campo obligatorio.")
+//    @NotEmpty(message = "Campo obligatorio.")
     @URL(message = "Debe ingresar un website válido.")
     private String instagram;
 
