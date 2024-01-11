@@ -11,7 +11,7 @@
 	<groupId>quinto.site</groupId>
 	<artifactId>ecosistema</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>Ecosistema</name>
 	<description>Directorio de Impacto</description>
 	<properties>
