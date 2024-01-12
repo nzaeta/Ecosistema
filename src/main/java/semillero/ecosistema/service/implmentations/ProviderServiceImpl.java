@@ -145,6 +145,13 @@ public class ProviderServiceImpl implements ProviderService {
 
     @Override
     public ProviderEntity save(String userId, ProviderRequestDto providerRequestDto) throws IOException {
+        if (providerRequestDto.getFacebook() == null || providerRequestDto.getFacebook().equals("") || providerRequestDto.getFacebook().equals("undefined")){
+            providerRequestDto.setFacebook("https://www.facebook.com/");
+        }
+        if (providerRequestDto.getInstagram() == null || providerRequestDto.getInstagram().equals("") || providerRequestDto.getInstagram().equals("undefined")){
+            providerRequestDto.setInstagram("https://www.instagram.com/");
+        }
+
         UserEntity userEntity = getUsersById(userId);
         validateMaxProviders(userEntity);
 
@@ -255,6 +262,12 @@ public class ProviderServiceImpl implements ProviderService {
         }
         if (providerUpdateRequestDto.isImagenesNuevasVacio()){
             providerUpdateRequestDto.setImagenesNuevas(new ArrayList<>());
+        }
+        if (providerUpdateRequestDto.getFacebook() == null || providerUpdateRequestDto.getFacebook().equals("") || providerUpdateRequestDto.getFacebook().equals("undefined")){
+            providerUpdateRequestDto.setFacebook("https://www.facebook.com/");
+        }
+        if (providerUpdateRequestDto.getInstagram() == null || providerUpdateRequestDto.getInstagram().equals("") || providerUpdateRequestDto.getFacebook().equals("undefined")){
+            providerUpdateRequestDto.setInstagram("https://www.instagram.com/");
         }
 
 
