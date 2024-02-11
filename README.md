@@ -45,7 +45,7 @@ EN PROCESO
 <a href='https://postimages.org/' target='_blank'><img src='https://i.postimg.cc/XGVtgVvf/Braian.png' border='0' alt='Braian'/></a>
         <h4 style="margin-top: 1rem;">Braian Carabajal</h4>
         <h4 style="margin-top: 1rem;">Frontend Developer</h4>
-          <a href="https://www.linkedin.com/in/braian-carabajal-dev/" target="_blank">
+          <a href="https://github.com/beckman924" target="_blank">
             <img src="https://img.shields.io/static/v1?style=for-the-badge&message=GitHub&color=172B4D&logo=GitHub&logoColor=FFFFFF&label="/>
           </a>
           <a href="https://www.linkedin.com/in/braian-carabajal-dev/" target="_blank">
@@ -105,5 +105,20 @@ EN PROCESO
 
 # 📸 Capturas de la aplicación: 
 
-## Landing Page:
 
+<p align="center">
+<img src="https://github.com/nzaeta/Ecosistema/assets/106348660/946bc630-bba6-445e-bd98-4d495ff844b8" alt="Descripción de la imagen">
+
+<img src="https://github.com/nzaeta/Ecosistema/assets/106348660/3069760c-be12-4bc1-a654-372e8a6faaf8" alt="Descripción de la imagen">
+
+<img src="https://github.com/nzaeta/Ecosistema/assets/106348660/31a4fc31-4ac2-4a93-b5cf-213e604214c2" alt="Descripción de la imagen">
+
+<img src="https://github.com/nzaeta/Ecosistema/assets/106348660/2375e62b-f38a-45a0-869d-13060d66386d" alt="Descripción de la imagen">
+
+<img src="https://github.com/nzaeta/Ecosistema/assets/106348660/37284201-eb39-47b8-a1aa-2d12ae9e74f0" alt="Descripción de la imagen">
+
+<img src="https://github.com/nzaeta/Ecosistema/assets/106348660/891bc514-fd7f-41f6-bcf6-5d17e32b0eda" alt="Descripción de la imagen">
+
+<img src="https://github.com/nzaeta/Ecosistema/assets/106348660/5d9982c8-d495-4043-a590-6f2745cd4920" alt="Descripción de la imagen">
+ 
+</p>
